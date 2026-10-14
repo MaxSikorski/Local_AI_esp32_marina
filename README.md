@@ -45,7 +45,7 @@ Gemini and Ollama are separate network options: their answers come from a cloud 
 3. **Explore how the model was trained:** see the [original training sources and reproducibility limits](training/README.md).
 4. **Optional — use Gemini or Ollama with XIAO:** follow the [network setup guide](docs/NETWORK_SETUP.md). This is a separate firmware that sends questions to a cloud service or another computer.
 
-**Model weights and tokenizer files are available in [GitHub Releases](https://github.com/mmm1712/Local_AI_esp32/releases/tag/v0.1.0-model-assets).** Follow the [download and installation guide](docs/ASSETS.md), using the package matching your board. Build the firmware from this repository. Fresh-board installation has not yet been validated end to end. Gemini/Ollama does not require PocketGPT weights.
+**Model weights and tokenizer files are available in [GitHub Releases](https://github.com/mmm1712/Local_AI_esp32/releases/tag/v0.1.0-model-assets).** Follow the [download and installation guide](docs/ASSETS.md), using the package matching your board. Build the firmware from this repository. Gemini/Ollama does not require PocketGPT weights.
 
 ## Model and hardware specifications
 

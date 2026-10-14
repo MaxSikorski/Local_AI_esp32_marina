@@ -97,6 +97,6 @@ python3 -m esptool --chip esp32s3 --port "$POCKETGPT_PORT" verify_flash \
 
 No NVS image is supplied or required. Wi-Fi credentials are not needed for the local firmware. Network Gemini/Ollama firmware is a separate installation described in [NETWORK_SETUP.md](NETWORK_SETUP.md).
 
-## Validation scope
+## Validation performed
 
-The published model assets match the retained working candidate hashes. XIAO cache assembly was checked offline, and earlier tests on already provisioned hardware are retained in the repository. Fresh-board installation using these instructions has not been exercised end to end. This release adds the missing deployment files; it does not claim new hardware tests or full historical retraining reproducibility.
+The published model assets match the retained working candidate hashes. The DevKit pack passed hash, size, footer and shared-matrix checks. XIAO matrix placement, cache hashes and cache assembly were checked offline. Recorded boot/cache checks, USB inference results and touchscreen checks are linked in [release status](RELEASE_STATUS.md). These deployment packages are separate from the historical training corpus and complete retraining pipeline.

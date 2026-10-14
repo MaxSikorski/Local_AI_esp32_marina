@@ -26,4 +26,4 @@ The Base V2 update-zero checkpoint was verified against a fresh seed-42 initiali
 
 Numeric deployment files are copied unchanged from the inspected working candidates. Public metadata has machine-local paths removed. The SentencePiece model's training-only path metadata was previously removed; token pieces, scores, IDs and normalization behavior are preserved. Packages contain no NVS image, Wi-Fi settings or API credentials. Signature screening is limited and does not guarantee absence of memorized training content.
 
-The two board layouts differ. Use the matching package and source commit. Build firmware from the source distribution. No fresh-board installation or new hardware run is claimed for this release.
+The two board layouts differ. Use the matching package and source commit. Build firmware from the source distribution.
