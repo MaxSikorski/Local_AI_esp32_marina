@@ -12,6 +12,6 @@ Deployment formats differ:
 
 The DevKit builder derives a deduplicated pack from a specific already-quantized mixed pack; it does not train or export a raw checkpoint. Pass both `--source` and `--out-dir`. Fixed binary input hashes prevent accidental use of another model. The original manifest's private path is not required or reproduced.
 
-Training provenance is documented in [DATA_PROVENANCE.md](DATA_PROVENANCE.md), with inspected-source hashes in PROVENANCE_EVIDENCE.json. Four conversational revisions are recorded. Historical general-corpus versions and the exact tokenizer mix remain unresolved. Weights/tokenizer release terms are still separate from the MIT code license.
+Training provenance is documented in [DATA_PROVENANCE.md](DATA_PROVENANCE.md), with inspected-source hashes in PROVENANCE_EVIDENCE.json. Four conversational revisions are recorded. Historical general-corpus versions and the exact tokenizer mix remain unresolved. Released deployment weights/tokenizer are downloadable through [Releases](ASSETS.md), with a separate [MIT model license](../MODEL_LICENSE) and [attribution/provenance notes](MODEL_RELEASE_NOTES.md). Historical data reconstruction limits remain.
 
 Recorded generation rates are approximately 1.41 tokens/s on the specified DevKit and 0.742 tokens/s on XIAO. These are prior single-run measurements, not a controlled cross-platform benchmark or a promise for another build.

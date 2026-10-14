@@ -16,8 +16,8 @@ Firmware source, touchscreen keyboard interfaces, build/configuration instructio
 
 ## Limits and separate work
 
-- Trained weights and tokenizer files are not included or available through a published download. They are necessary to run the local model. Original Base V2 training sources are now included under `training/`; the full subsequent repair/export pipeline and training data remain incomplete.
-- Model/tokenizer redistribution terms and parts of historical training-data provenance remain under review. This is not a finding that redistribution is prohibited. See [DATA_PROVENANCE.md](DATA_PROVENANCE.md) and [../LICENSE_STATUS.md](../LICENSE_STATUS.md).
+- Deployment weights and tokenizer files are now distributed separately in [GitHub Releases](ASSETS.md); they are not committed to the source tree. They are necessary to run the local model. Original Base V2 training sources are now included under `training/`; the full subsequent repair/export pipeline and training data remain incomplete.
+- The author selected MIT for released weights/tokenizer within the author’s rights. Attribution is supplied with the packages; parts of historical data provenance and exact synthetic-data contribution remain unresolved. See [DATA_PROVENANCE.md](DATA_PROVENANCE.md) and [../LICENSE_STATUS.md](../LICENSE_STATUS.md).
 - The bundled display source comparison and notice recovery are documented; retained license/notice files must remain. Linked binary dependency obligations still need review if publishing firmware binaries. See [THIRD_PARTY.md](THIRD_PARTY.md).
 - Fresh-board provisioning and builds on hosts other than Apple Silicon macOS have not been validated. The local hardware test used an already provisioned board.
 - Checksums and privacy scanning do not certify model quality or the absence of every possible secret.
@@ -31,4 +31,10 @@ On 2026-10-13, 30 source/configuration filenames were clarified and remaining or
 - Included 20 historical training Python sources with AST-equivalent comment cleanup, per-file provenance hashes, saved schedule and readable Base V2 recipe. No training was run. The final runner's `--help` works in the existing development environment; missing historical data prevents a turnkey full run.
 - Removed the optional root SHA256SUMS.txt and replaced the release checker with limited privacy/metadata checks. Checksums generated for model packages and historical evidence remain because they serve different purposes.
 - Nine tests passed; all 28 Python sources parsed; local Markdown links resolved. Existing firmware source bytes were unchanged, so previous build evidence is retained rather than claiming a new hardware test.
-- No model weights, tokenizer, datasets, private backups, or prebuilt firmware are included. The source release is published at https://github.com/mmm1712/Local_AI_esp32.
+- The source tree contains no model weights, tokenizer, datasets, private backups, or prebuilt firmware. Model/tokenizer deployment assets are supplied separately in Releases. The source release is published at https://github.com/mmm1712/Local_AI_esp32.
+
+## Model asset release — 2026-10-13
+
+- DevKit and XIAO deployment assets are supplied as distinct release ZIPs with license, attribution, file sizes and SHA256 manifests. No firmware executable or whole-board/NVS backup is included.
+- DevKit pack verification passed; XIAO Flash/cache hashes and all 84 matrix placements were checked against source constants. Existing hardware evidence remains the validation scope; no board was flashed for this release.
+- The asset guide supplies matching download, build, packaging and write/verify commands. Fresh-board provisioning remains untested end to end.

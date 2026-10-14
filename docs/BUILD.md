@@ -1,5 +1,7 @@
 # Build and installation
 
+Start with [model asset downloads and complete installation commands](ASSETS.md). Firmware is built from source; matching model/tokenizer assets are supplied in Releases.
+
 ## DevKit local inference
 
 Requires an ESP32-S3 DevKit with **32 MB octal Flash and 16 MB PSRAM**. This is not the generic 8 MB XIAO target.
@@ -13,7 +15,7 @@ pio run -c platformio.ini -e local_devkit
 
 The platform URL and framework packages are pinned in the configuration. The build generates bootloader, partitions and firmware under `.pio/build/local_devkit/`. Only the environment with supplied source is exposed.
 
-Weights/tokenizer assets are separate and not yet published. Once reviewed assets are available, verify `python3 tools/verify_pack.py PATH_TO_DEVKIT_WEIGHTS` before installation. Required component addresses:
+Weights/tokenizer assets are separate [release downloads](ASSETS.md). After extracting the matching DevKit package, verify `python3 tools/verify_pack.py PATH_TO_DEVKIT_WEIGHTS` before installation. Required component addresses:
 
 | Component | Flash address |
 |---|---|

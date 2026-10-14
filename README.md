@@ -40,12 +40,12 @@ Gemini and Ollama are separate network options: their answers come from a cloud 
 
 ## Get started
 
-1. **Run PocketGPT locally on ESP32-S3:** choose the [DevKit build](docs/BUILD.md#devkit-local-inference) or the [XIAO touchscreen build](docs/BUILD.md#xiao-local-keyboard--built-and-serial-tested-on-hardware). The model runs on the board itself.
+1. **Run PocketGPT locally on ESP32-S3:** [download the model assets and follow installation steps](docs/ASSETS.md), then choose the [DevKit build](docs/BUILD.md#devkit-local-inference) or the [XIAO touchscreen build](docs/BUILD.md#xiao-local-keyboard--built-and-serial-tested-on-hardware). The model runs on the board itself.
 2. **For the XIAO local build:** follow the [official GCC16 setup](docs/TOOLCHAIN.md), then the build, packaging and installation steps above.
 3. **Explore how the model was trained:** see the [original training sources and reproducibility limits](training/README.md).
 4. **Optional — use Gemini or Ollama with XIAO:** follow the [network setup guide](docs/NETWORK_SETUP.md). This is a separate firmware that sends questions to a cloud service or another computer.
 
-**Local installation requires model weights and tokenizer files, which are not yet available for download.** The local build instructions describe the required layout, but a new board cannot run PocketGPT from this repository alone yet. Gemini/Ollama does not require PocketGPT weights.
+**Model weights and tokenizer files are available in [GitHub Releases](https://github.com/mmm1712/Local_AI_esp32/releases/tag/v0.1.0-model-assets).** Follow the [download and installation guide](docs/ASSETS.md), using the package matching your board. Build the firmware from this repository. Fresh-board installation has not yet been validated end to end. Gemini/Ollama does not require PocketGPT weights.
 
 ## Model and hardware specifications
 
@@ -77,7 +77,7 @@ Deployment files differ between boards and are not interchangeable. Recorded spe
 
 Run `python3 -B tools/verify_release.py .` before publishing to screen local metadata and common secret patterns. It does not verify file integrity, contact hardware, or guarantee the absence of every secret. The optional root checksum list was removed.
 
-This repository contains the code for running PocketGPT, but does not include its trained weights or tokenizer files. Both are required to run the local model on a newly provisioned board. Their distribution terms are still being reviewed; no asset download is published yet. This does not imply that the model was initialized from pretrained weights. Whole-board backups and credentials are excluded. The Gemini/Ollama interface does not require PocketGPT weights.
+The Git repository contains source code; trained deployment weights and tokenizer files are distributed separately through [Releases](https://github.com/mmm1712/Local_AI_esp32/releases/tag/v0.1.0-model-assets). The author licenses these artifacts under MIT to the extent of the author’s rights; preserve the [model license](MODEL_LICENSE) and [dataset attribution/provenance notes](docs/MODEL_RELEASE_NOTES.md). Training data and full historical reproducibility remain separate. Whole-board backups and credentials are excluded. The Gemini/Ollama interface does not require PocketGPT weights.
 
 ## Training source
 
