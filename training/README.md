@@ -1,37 +1,56 @@
-# Original PocketGPT training sources
+# How PocketGPT was trained
 
-These are original project scripts, not replacement examples. Ordinary comments were removed for publication; their Python AST is unchanged. Historical names are retained because imports and checkpoint evidence refer to them. `SOURCE_PROVENANCE.json` records original and published hashes. Docstrings remain where they describe CLI behavior. No training data, personal conversations, weights or tokenizer artifacts are bundled.
+This folder contains the original Python code used to define the PocketGPT model, prepare data, train its tokenizer and train the base model from random initialization.
 
-## Start here
+To run PocketGPT on your board, follow the [installation guide](../docs/ASSETS.md). The model weights and tokenizer are available in [GitHub Releases](https://github.com/mmm1712/Local_AI_esp32/releases/tag/v0.1.0-model-assets).
+
+## Start with these files
+
+| File | What it does |
+|---|---|
+| `pocketlm/pocketlm_v1.py` | Defines the Transformer model |
+| `pocketlm/training/pocketlm_30m.py` | Sets the architecture to 30.46 million independent parameters |
+| `base_v2_config.json` | Summarizes the main training settings |
+| `pocketlm/training/train_friend_base_30m_v2_300m_v1.py` | Runs the main base-model training |
+
+**Base V2** is the internal name for the second version of the base model, before later training and refinement.
+
+## Main training run
+
+| Setting | Value |
+|---|---|
+| Initialization | Random weights, seed 42 |
+| Processed token positions | 300,001,280 |
+| General-text positions | 270,001,280 |
+| Conversational positions | 30,000,000 |
+| Optimizer updates | 58,594 |
+| Batch size | 32 sequences |
+| Sequence length | 160 tokens |
+| Optimizer | AdamW |
+
+The total is 58,594 updates × 32 sequences × 160 positions. It counts processed positions, not distinct words. Further training and deployment optimizations followed this base run.
+
+## Data preparation and supporting files
 
 | Files | Purpose |
 |---|---|
-| `pocketlm/pocketlm_v1.py` | Trainable transformer architecture |
-| `pocketlm/training/pocketlm_30m.py` | 30M model factory |
-| `pocketlm/quantization/kv_cache_int8.py` | Architecture's cache dependency |
-| `pocketlm/training/train_friend_base_30m_v2_300m_v1.py` | Final Base V2 training runner, initialized randomly |
-| `pocketlm/training/audit_friend_base_v2_training_stream_v1.py` | Fixed data hashes and deterministic window schedule |
-| `base_v2_config.json` | Readable transcription of the runner's RECIPE; runner code is authoritative |
-| `checkpoints/_audit_friend_base_v2_training_stream_v1/schedule_spec.json` | Original saved schedule, not weights |
-| `pocketlm/training/build_pretrain_corpus.py`, `tokenize_pretrain.py` | First general-data stream |
-| `pocketlm/training/build_pretrain_stage1b.py`, `tokenize_pretrain_stage1b.py` | Second general-data stream |
-| `pocketlm/training/build_stage1b_validation.py`, `tokenize_stage1b_validation.py` | Separate general validation stream |
-| `pocketlm/training/build_friend_base_chat_corpus_v1.py`, `build_friend_base_chat_corpus_v2.py`, `tokenize_friend_base_chat_corpus_v2.py` | Conversational data preparation; v2 imports v1 helpers |
-| `pocketlm/tokenizer/build_tokenizer_corpus.py`, `train_tokenizer_candidates.py` | Tokenizer corpus and candidate training |
-| `pocketlm/training/train_pretrain_30m.py` | Earlier approximately 50M-token general experiment, not the 300M run |
-| `pocketlm/training/train_friend_base_30m.py`, `friend_base_v1_config.py` | Separate earlier Friend Base v1 experiment, not a verified ancestor of Base V2 |
-| `pocketlm/training/benchmark_training.py` | Random-token performance benchmark, not evidence of the final training run |
+| `pocketlm/training/build_pretrain_corpus.py`, `tokenize_pretrain.py` | Prepare and tokenize the first general-text stream |
+| `pocketlm/training/build_pretrain_stage1b.py`, `tokenize_pretrain_stage1b.py` | Prepare and tokenize the second general-text stream |
+| `pocketlm/training/build_stage1b_validation.py`, `tokenize_stage1b_validation.py` | Prepare separate validation data |
+| `pocketlm/training/build_friend_base_chat_corpus_v1.py`, `build_friend_base_chat_corpus_v2.py`, `tokenize_friend_base_chat_corpus_v2.py` | Prepare conversational data; v2 uses helpers from v1 |
+| `pocketlm/tokenizer/build_tokenizer_corpus.py`, `train_tokenizer_candidates.py` | Prepare tokenizer data and train candidate tokenizers |
+| `pocketlm/training/audit_friend_base_v2_training_stream_v1.py` | Check training inputs and construct the fixed sampling schedule |
+| `checkpoints/_audit_friend_base_v2_training_stream_v1/schedule_spec.json` | Saved sampling schedule |
+| `pocketlm/quantization/kv_cache_int8.py` | Cache implementation required by the model code |
+| `pocketlm/training/train_pretrain_30m.py` | Earlier approximately 50M-token general-text experiment |
+| `pocketlm/training/train_friend_base_30m.py`, `friend_base_v1_config.py` | Separate earlier Friend Base v1 experiment |
+| `pocketlm/training/benchmark_training.py` | Measure training performance using random token inputs |
 
-## Verified historical Base V2 run
+The earlier experiments are included for reference; they are separate from the main 300M-token Base V2 run. Original filenames are retained so imports and historical records remain traceable.
 
-300,001,280 processed token positions = 58,594 updates × 32 sequences × 160 positions. General: 270,001,280; conversational: 30,000,000. The retained update-zero checkpoint matched all 111 freshly initialized state tensors with seed 42; its optimizer was empty. The final optimizer states recorded step 58,594. These findings support random initialization for Base V2. The later repair/tied-export stages are separate and are not fully packaged here.
+## Inspect the training script
 
-Original runner SHA256: `09f24315915bd301d9e83fc279fc955920c6674cf745d35b247fdd1d0377e76a`.
-Final historical Base V2 checkpoint SHA256: `2cf3a7eb6a2ed8026fb98cec0da4895762ce8d9590f4108c30efa682d8c7c20f`.
-
-## Inspecting and running
-
-Use a separate Python environment, then from this `training` directory:
+From this `training` directory, create a Python environment and view the available options:
 
 ```sh
 python3 -m venv .venv
@@ -40,19 +59,38 @@ python3 -m pip install -r requirements.txt
 python3 -m pocketlm.training.train_friend_base_30m_v2_300m_v1 --help
 ```
 
-Requirements list dependencies, not a recovered historical lockfile. The historical checkpoint reported PyTorch 2.13.0 on MPS; cross-version/cross-device bitwise reproduction is not established.
+These commands install dependencies and display help. They do not start training. On Windows, activate the environment with `.venv\Scripts\Activate.ps1` in PowerShell.
 
-**This is a source archive, not a turnkey training distribution.** `--dry-run` validates historical artifacts and fails until those inputs exist; it does not download them. The original runner requires all 12 input files and hashes declared by `source_paths()` / `EXPECTED_SHA`, plus two passive V4 validation arrays under `data/pocketlm/friend_distill_pilot_v4`. Paths resolve relative to this `training` directory. Data builders also need their declared local inputs; inspect them before execution. Some builders download datasets or create files. Do not point them at your only historical data copy.
+## Running the historical training process
 
-Only after obtaining the matching artifacts can the historical commands be used:
+The original runner expects specific prepared data files. It does not download or rebuild them automatically. The required paths and hashes are listed in `source_paths()` and `EXPECTED_SHA` in the audit script. Two additional validation arrays are expected under `data/pocketlm/friend_distill_pilot_v4`.
+
+After supplying the matching inputs, the following commands check them and start training respectively:
 
 ```sh
 python3 -m pocketlm.training.train_friend_base_30m_v2_300m_v1 --dry-run --device cpu
 python3 -m pocketlm.training.train_friend_base_30m_v2_300m_v1 --train --device mps
 ```
 
-These are commands derived from the original parser, not recovered shell history. `--train` performs a costly full run and writes checkpoints. Comment removal changes the runner hash; this copy must not be presented as byte-identical to the historical runner or used to resume historical checkpoints without understanding its binding checks.
+`--train` performs the full training run and writes checkpoints. `mps` selects Apple Silicon acceleration; `cpu` and `cuda` are also accepted. Paths resolve relative to this `training` directory. Data-preparation scripts may download datasets or create files, so inspect their inputs and output locations before running them.
 
-## Missing for exact reproduction
+## What is available to reproduce the project?
 
-Frozen general-data revisions, original tokenized streams and metadata, tokenizer model and exact tokenizer-corpus manifest, local conversational examples and their confirmed provenance, V4 validation arrays, a full historical dependency lock, and the subsequent repair/export lineage. See [data provenance](../docs/DATA_PROVENANCE.md). Do not redistribute datasets simply because these scripts can access them. Training from these sources today is not a promise of identical final weights.
+**For deployment:** the released quantized weights and tokenizer can be downloaded using the [installation guide](../docs/ASSETS.md).
+
+**For repeating the historical training run:** the original tokenized data streams, local examples, validation arrays and a complete historical dependency lock are not bundled. Some general-data revisions and the exact tokenizer training mix remain incompletely documented. The later refinement/export stages are also not fully packaged. See [data provenance](../docs/DATA_PROVENANCE.md).
+
+The released SentencePiece tokenizer preserves the original vocabulary and normalization behavior, but training-path metadata was removed. Its file hash therefore differs from the original tokenizer hash expected by the historical runner. Downloading it alone does not satisfy the runner's original input checks. Do not bypass those checks to claim an exact reproduction.
+
+<details>
+<summary>Historical verification and source-file details</summary>
+
+The retained update-zero checkpoint matched all 111 freshly initialized state tensors with seed 42 and had an empty optimizer. The final optimizer states recorded step 58,594, supporting random initialization for Base V2.
+
+- Original training script SHA256: `09f24315915bd301d9e83fc279fc955920c6674cf745d35b247fdd1d0377e76a`.
+- Historical final Base V2 checkpoint SHA256: `2cf3a7eb6a2ed8026fb98cec0da4895762ce8d9590f4108c30efa682d8c7c20f`.
+- [SOURCE_PROVENANCE.json](SOURCE_PROVENANCE.json) records original and published source hashes. Publication cleanup removed ordinary comments while preserving the Python syntax structure. The changed script hash matters when resuming checkpoints with source-binding checks.
+- The historical checkpoint reported PyTorch 2.13.0 on MPS. `requirements.txt` lists dependencies; it is not a recovered historical lockfile. Identical results across library versions and devices are not established.
+- The example commands above follow the original command-line parser; they are not a recovered shell-history transcript.
+
+</details>
