@@ -31,4 +31,4 @@ On 2026-10-13, 30 source/configuration filenames were clarified and remaining or
 - Included 20 historical training Python sources with AST-equivalent comment cleanup, per-file provenance hashes, saved schedule and readable Base V2 recipe. No training was run. The final runner's `--help` works in the existing development environment; missing historical data prevents a turnkey full run.
 - Removed the optional root SHA256SUMS.txt and replaced the release checker with limited privacy/metadata checks. Checksums generated for model packages and historical evidence remain because they serve different purposes.
 - Nine tests passed; all 28 Python sources parsed; local Markdown links resolved. Existing firmware source bytes were unchanged, so previous build evidence is retained rather than claiming a new hardware test.
-- No model weights, tokenizer, datasets, private backups, or prebuilt firmware are included. No files have been uploaded to GitHub.
+- No model weights, tokenizer, datasets, private backups, or prebuilt firmware are included. The source release is published at https://github.com/mmm1712/Local_AI_esp32.

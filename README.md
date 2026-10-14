@@ -2,7 +2,7 @@
 
 ![PocketGPT handheld device with its touchscreen keyboard and a recorded answer](docs/images/pocketgpt-device.jpg)
 
-An experimental 30.46-million-parameter language model running directly on an ESP32-S3, with an alternative XIAO touchscreen interface for Gemini or Ollama.
+A language model trained from scratch and running offline on an ESP32-S3, with a touchscreen chat interface on XIAO.
 
 | Project | Inference location | Status |
 |---|---|---|
@@ -38,10 +38,35 @@ Gemini and Ollama are separate network options: their answers come from a cloud 
 
 ## Get started
 
-- **[Connect XIAO to Gemini or Ollama — step-by-step](docs/NETWORK_SETUP.md)**
-- [Build and installation](docs/BUILD.md)
-- [Official GCC16 setup](docs/TOOLCHAIN.md)
-- [Model and artifact formats](docs/MODEL_CARD.md)
+1. **Run PocketGPT locally on ESP32-S3:** choose the [DevKit build](docs/BUILD.md#devkit-local-inference) or the [XIAO touchscreen build](docs/BUILD.md#xiao-local-keyboard--built-and-serial-tested-on-hardware). The model runs on the board itself.
+2. **For the XIAO local build:** follow the [official GCC16 setup](docs/TOOLCHAIN.md), then the build, packaging and installation steps above.
+3. **Explore how the model was trained:** see the [original training sources and reproducibility limits](training/README.md).
+4. **Optional — use Gemini or Ollama with XIAO:** follow the [network setup guide](docs/NETWORK_SETUP.md). This is a separate firmware that sends questions to a cloud service or another computer.
+
+**Local installation requires model weights and tokenizer files, which are not yet available for download.** The local build instructions describe the required layout, but a new board cannot run PocketGPT from this repository alone yet. Gemini/Ollama does not require PocketGPT weights.
+
+## Model and hardware specifications
+
+| Characteristic | PocketGPT local model |
+|---|---|
+| Independent trained parameters | 30,460,864 (about 30.46 million) |
+| Architecture | Decoder-only Transformer, 12 layers, hidden size 448 |
+| Attention | 8 query heads, 2 key/value heads |
+| Tokenizer | SentencePiece, 6,144 tokens |
+| Firmware context limit | 64 tokens |
+| Maximum generated output | 24 tokens per response |
+| Internet during inference | Not required |
+| Recorded generation speed | About 1.41 tokens/s on DevKit; 0.742 tokens/s on XIAO |
+
+| Hardware | Memory and peripherals | Model deployment size |
+|---|---|---|
+| ESP32-S3 DevKit | 32 MB Flash, 16 MB PSRAM; USB Serial chat | 20,241,616 bytes, deduplicated mixed Q4/FP16 package |
+| XIAO ESP32-S3 | 8 MB Flash, 8 MB PSRAM; Seeed Round Display, touchscreen keyboard and microSD | 21,706,088 bytes across deployment assets, including Flash caches; board-specific mixed quantization |
+
+Deployment files differ between boards and are not interchangeable. Recorded speeds are individual hardware measurements, not a controlled benchmark or a guarantee. Token limits count tokenizer tokens, not words. See [model and artifact details](docs/MODEL_CARD.md) for exact formats.
+
+## Further documentation
+
 - [Data provenance](docs/DATA_PROVENANCE.md)
 - [Third-party inventory](docs/THIRD_PARTY.md)
 - [Release status and omissions](docs/RELEASE_STATUS.md)
