@@ -4,6 +4,8 @@
 
 A language model trained from scratch and running offline on an ESP32-S3, with a touchscreen chat interface on XIAO.
 
+🎬 **[Watch the project video on YouTube](https://youtu.be/LgCNVUndTH8)**
+
 | Project | Inference location | Status |
 |---|---|---|
 | `espdev_ai/firmware` | ESP32-S3 DevKit, 32 MB Flash / 16 MB PSRAM | Source and recorded hardware results |
@@ -79,7 +81,11 @@ This repository contains the code for running PocketGPT, but does not include it
 
 ## Training source
 
-[Original architecture, training scripts and reproducibility limits](training/README.md) are included. These document the historical Base V2 run; they are not a complete downloadable training corpus or the full later repair pipeline.
+[Original architecture, training scripts and reproducibility limits](training/README.md) are included.
+
+The base model was initially trained on approximately 300 million token positions, followed by further training and refinement. **Base V2** is the internal name for the second version of that base model, before the later refinement stages.
+
+ These document the historical Base V2 run; they are not a complete downloadable training corpus or the full later repair pipeline.
 
 ## Serial testing
 
