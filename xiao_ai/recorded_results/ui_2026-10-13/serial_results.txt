@@ -1,0 +1,9 @@
+You: hello
+[STATS] tokens=3|stopped=yes|total_ms=6372.3|generation_ms=4076.1|gen_tps=0.7360|layers_ms=6075.0|lm_head_ms=291.7
+PocketGPT: Hello.
+You: how are you?
+[STATS] tokens=6|stopped=yes|total_ms=11803.1|generation_ms=8083.1|gen_tps=0.7423|layers_ms=11283.6|lm_head_ms=509.5
+PocketGPT: I'm doing okay.
+You: what can you do?
+[STATS] tokens=14|stopped=yes|total_ms=23131.9|generation_ms=18777.2|gen_tps=0.7456|layers_ms=22020.9|lm_head_ms=1089.6
+PocketGPT: I can chat, answer simple questions, and do tiny math.

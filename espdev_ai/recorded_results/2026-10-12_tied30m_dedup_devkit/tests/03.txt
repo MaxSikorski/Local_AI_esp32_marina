@@ -1,0 +1,23 @@
+
+You: say something nice
+PocketGPT: thinking... [TIED30M Q4/FP16 dedup]
+[CHAT] canonical: [say something nice]
+[CHAT] native prompt question_tokens=3 total_tokens=5 encode_us=474
+  ids: 4 1450 1071 2122 5
+[CHAT] END step=9 generated=9
+PocketGPT: You're doing better than you think.
+[RAW] You're doing better than you think.
+[STATS] tokens=9 stopped=yes total_ms=9104.4 generation_ms=6303.7 gen_tps=1.4277 layers_ms=7687.1 lm_head_ms=1235.2
+[PROFILE] layer_load_ms=0.0 layer_map_ms=96.5 mmap_fallbacks=0
+[OPS] normA=62.9 q=642.2 k=319.5 v=319.8 attn=43.5 o=643.9 normF=62.5 gate=3833.6 up=3836.4 swiglu=173.3 down=1894.9
+[GATEUP] pair_ms=3840.2 gate_work_ms=3833.6 up_work_ms=3836.4
+[DOWNSPLIT] pair_ms=1894.9 main_work_ms=1888.8 worker_work_ms=1891.2
+[QSPLIT] pair_ms=642.2 main_work_ms=638.2 worker_work_ms=638.4
+[OSPLIT] pair_ms=643.9 main_work_ms=639.5 worker_work_ms=639.9
+[KVDUAL] pair_ms=323.6 k_work_ms=319.5 v_work_ms=319.8
+[ATTNDUAL] pair_ms=35.8 main_work_ms=33.0 worker_work_ms=32.1
+[ROPEKV] rope_ms=4.9 kvstore_ms=2.1 combined_ms=7.0
+[ROPECACHE] build_ms=1.8 hits=154 misses=14
+[SWIGLUDUAL] pair_ms=173.3 main_work_ms=168.9 worker_work_ms=169.5
+
+You> 

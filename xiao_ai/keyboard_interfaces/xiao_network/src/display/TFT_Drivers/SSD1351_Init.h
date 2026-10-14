@@ -1,0 +1,35 @@
+{
+  writecommand(0xFD);  
+  writedata(0x12);
+  writecommand(0xFD);  
+  writedata(0xB1);
+  writecommand(0xAE);  
+  writecommand(0xB3);  
+  writedata(0xF1);
+  writecommand(0xCA);  
+  writedata(127);
+  writecommand(0xA2);  
+  writedata(0x00);
+  writecommand(0xB5);  
+  writedata(0x00);
+  writecommand(0xAB);  
+  writedata(0x01);
+  writecommand(0xB1);  
+  writedata(0x32);
+  writecommand(0xBE);  
+  writedata(0x05);
+  writecommand(0xA6);  
+  writecommand(0xC1);  
+  writedata(0xC8);
+  writedata(0x80);
+  writedata(0xC8);
+  writecommand(0xC7);  
+  writedata(0x0F);
+  writecommand(0xB4);  
+  writedata(0xA0);
+  writedata(0xB5);
+  writedata(0x55);
+  writecommand(0xB6);  
+  writedata(0x01);
+  writecommand(0xAF);  
+}

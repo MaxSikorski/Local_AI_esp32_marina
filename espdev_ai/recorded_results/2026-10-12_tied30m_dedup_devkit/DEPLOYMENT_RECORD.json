@@ -1,0 +1,86 @@
+{
+  "status": "DEPLOYED_AND_VALIDATED",
+  "board": {
+    "mac": "[DEVICE_ID_REMOVED]",
+    "flash": "32MB",
+    "psram": "16MB"
+  },
+  "model": "PocketGPT tied 30.46M (30,460,864 unique parameters)",
+  "firmware": {
+    "sha256": "937d8699538fc0c9a89be60ca9eb221c561447499e2231cefac316183d4a6e2d",
+    "banner": "TIED30M dedup serial chat"
+  },
+  "weight_package_bytes": 20241616,
+  "flash_image_sha256": "9c3c02e9adf96a63e80311ac811f9dc8a7d9865ca5880d69d86e6949d6e22024",
+  "writes": [
+    "0x0 slice 65536 B ae3c2608",
+    "0x10000 slice 860160 B 3b057be1",
+    "0x1855000 slice 4096 B 83ffcf41"
+  ],
+  "boot": {
+    "package_verify_ms": 1429.8,
+    "head_cache_crc32": "0x6306a56a",
+    "first4096_sum": 362132,
+    "scalecache_checksum4096": "77803.350353241",
+    "free_psram_after_head_cache": 4041464,
+    "free_psram_ready": 2304756
+  },
+  "prompts": [
+    {
+      "prompt": "hello",
+      "answer": "Hello.",
+      "tokens": 3,
+      "total_ms": 4420.6,
+      "generation_ms": 2179.9,
+      "prefill_ms": 2240.7,
+      "gen_tps": 1.3762,
+      "layers_ms": 3836.0,
+      "lm_head_ms": 494.1,
+      "wall_s": 4.49
+    },
+    {
+      "prompt": "how are you?",
+      "answer": "I'm doing okay.",
+      "tokens": 6,
+      "total_ms": 7605.2,
+      "generation_ms": 4243.2,
+      "prefill_ms": 3362.0,
+      "gen_tps": 1.414,
+      "layers_ms": 6585.4,
+      "lm_head_ms": 864.7,
+      "wall_s": 7.72
+    },
+    {
+      "prompt": "what can you do?",
+      "answer": "I can chat, answer simple questions, and do tiny math.",
+      "tokens": 14,
+      "total_ms": 13681.0,
+      "generation_ms": 9756.7,
+      "prefill_ms": 3924.3,
+      "gen_tps": 1.4349,
+      "layers_ms": 11555.0,
+      "lm_head_ms": 1852.9,
+      "wall_s": 13.84
+    },
+    {
+      "prompt": "say something nice",
+      "answer": "You're doing better than you think.",
+      "tokens": 9,
+      "total_ms": 9104.4,
+      "generation_ms": 6303.7,
+      "prefill_ms": 2800.7,
+      "gen_tps": 1.4277,
+      "layers_ms": 7687.1,
+      "lm_head_ms": 1235.2,
+      "wall_s": 9.17
+    }
+  ],
+  "summary": {
+    "gen_tps_mean": 1.4132,
+    "gen_tps_min": 1.3762,
+    "gen_tps_max": 1.4349,
+    "token_weighted_gen_tps": 1.4233,
+    "end_to_end_tps": 0.9192,
+    "ms_per_generated_token": 702.6
+  }
+}

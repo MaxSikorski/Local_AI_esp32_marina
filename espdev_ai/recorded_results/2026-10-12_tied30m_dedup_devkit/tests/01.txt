@@ -1,0 +1,23 @@
+
+You: how are you?
+PocketGPT: thinking... [TIED30M Q4/FP16 dedup]
+[CHAT] canonical: [how are you?]
+[CHAT] native prompt question_tokens=4 total_tokens=6 encode_us=268
+  ids: 4 643 362 342 6109 5
+[CHAT] END step=6 generated=6
+PocketGPT: I'm doing okay.
+[RAW] I'm doing okay.
+[STATS] tokens=6 stopped=yes total_ms=7605.2 generation_ms=4243.2 gen_tps=1.4140 layers_ms=6585.4 lm_head_ms=864.7
+[PROFILE] layer_load_ms=0.0 layer_map_ms=82.7 mmap_fallbacks=0
+[OPS] normA=53.9 q=550.5 k=273.8 v=274.1 attn=33.5 o=552.0 normF=53.5 gate=3286.4 up=3288.7 swiglu=148.5 down=1624.2
+[GATEUP] pair_ms=3291.9 gate_work_ms=3286.4 up_work_ms=3288.7
+[DOWNSPLIT] pair_ms=1624.2 main_work_ms=1619.1 worker_work_ms=1621.0
+[QSPLIT] pair_ms=550.5 main_work_ms=547.1 worker_work_ms=547.2
+[OSPLIT] pair_ms=552.0 main_work_ms=548.3 worker_work_ms=548.6
+[KVDUAL] pair_ms=277.4 k_work_ms=273.8 v_work_ms=274.1
+[ATTNDUAL] pair_ms=26.8 main_work_ms=24.5 worker_work_ms=23.7
+[ROPEKV] rope_ms=4.2 kvstore_ms=1.8 combined_ms=6.0
+[ROPECACHE] build_ms=1.5 hits=132 misses=12
+[SWIGLUDUAL] pair_ms=148.5 main_work_ms=144.7 worker_work_ms=145.3
+
+You> 

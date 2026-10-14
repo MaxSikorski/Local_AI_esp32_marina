@@ -1,0 +1,8 @@
+Local keyboard UI hardware test, 2026-10-13
+Firmware size: 450672 bytes. Original partition/cache layout preserved.
+Private full-flash backup was verified before writing only the app/cache region.
+Flash write hash verified; K10_PRECACHE PASS; V5_READY observed.
+Three questions sent over USB Serial; all returned to input.
+User confirmed display and keyboard visible. User also confirmed digits, backspace, ABC switching, hello entry and GO with a reply.
+Timing rows are device measurements, not host wait times.
+No Wi-Fi credentials or device identifiers included in this evidence.

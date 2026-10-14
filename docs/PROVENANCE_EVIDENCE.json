@@ -1,0 +1,26 @@
+{
+  "tied_comparison_script": {
+    "filename": "compare.py",
+    "sha256": "12f1dc0791ff49e1a0f0063165e44131fa52e4bc5be97443d9499d4ab88bf736"
+  },
+  "conversational_manifest": {
+    "filename": "friend_base_chat_v2_manifest.json",
+    "sha256": "1de239bf626d95a5482f554434c3711c1d830b1958a44b9510c4b9b44525151a"
+  },
+  "tokenizer_corpus_builder": {
+    "filename": "build_tokenizer_corpus.py",
+    "sha256": "ce016699cd2673b3a48c58ad52b9be8256cb0e0bdc8bf598d2629dd1d47cdc99"
+  },
+  "tokenizer_metadata": {
+    "filename": "meta.json",
+    "sha256": "4bbec9ae062e7cd57e3843d696e6b857a2f8457dd2198107e052ead31f948b4e"
+  },
+  "prior_lineage_audit": {
+    "filename": "pocketgpt_training_lineage_audit.md",
+    "sha256": "2dcfb1989c94919fe2281bda709aadd2fa9b18c8209c38333f8f5b0bf964eeb1"
+  },
+  "selected_tied_checkpoint": {
+    "filename": "tied_plus050.pt",
+    "sha256": "ade4f45957136c391cc6cce3cdebea18d07f4a5a52c5a7983c8d3d0239655c01"
+  }
+}

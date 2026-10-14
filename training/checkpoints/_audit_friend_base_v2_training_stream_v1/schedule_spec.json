@@ -1,0 +1,69 @@
+{
+  "batch_size": 32,
+  "chat": {
+    "available_windows": 187500,
+    "four_chat_window_updates": 11718,
+    "fraction": 0.09999957333515377,
+    "repeated_windows": 0,
+    "selected_windows": 187500,
+    "target_tokens": 30000000,
+    "three_chat_window_updates": 46876,
+    "unused_trailing_stream_tokens": 42
+  },
+  "evaluation_checkpoints": [
+    {
+      "actual_processed_tokens": 50001920,
+      "nominal_target_tokens": 50000000,
+      "update": 9766
+    },
+    {
+      "actual_processed_tokens": 100003840,
+      "nominal_target_tokens": 100000000,
+      "update": 19532
+    },
+    {
+      "actual_processed_tokens": 200002560,
+      "nominal_target_tokens": 200000000,
+      "update": 39063
+    },
+    {
+      "actual_processed_tokens": 300001280,
+      "nominal_target_tokens": 300000000,
+      "update": 58594
+    }
+  ],
+  "general": {
+    "available_windows": 1746016,
+    "repeated_windows": 0,
+    "selected_windows": 1687508,
+    "stage1a_selected_tokens": 132346880,
+    "stage1a_selected_windows": 827168,
+    "stage1b_selected_tokens": 137654400,
+    "stage1b_selected_windows": 860340,
+    "target_tokens": 270001280
+  },
+  "schedule_sha256": {
+    "chat_windows_per_update": "601e8f458227992662472f534fbedfd9b7c52c1e20d59d8e29c2e849e97a37ab",
+    "selected_general_global_window_ids": "222ffd033c279de10a81a8f8c860e95ee70f6552ac98de76478629a0f304d6a3",
+    "shuffled_chat_window_ids": "b1c339c985ac6941e9a0a74b2f7ba9a501404d7d5ad95e99c4a844315e590f5b"
+  },
+  "seed": 42,
+  "sequence_length": 160,
+  "source_sha256": {
+    "chat_manifest": "1de239bf626d95a5482f554434c3711c1d830b1958a44b9510c4b9b44525151a",
+    "chat_meta": "4fd6b0801049167bd79c1800e9847c429418cc5eb3d9b76b45f44df0a2e88506",
+    "chat_train": "100591e97667cc7a54ebc1cd6916e492be5e3088114fb38c54f10c84344ac08d",
+    "chat_val": "137464c35c73f0e5eb9934a5830d493e2732474f54127d2fd72f0e1d6ccef06a",
+    "stage1a_meta": "39100b38f6dc8662a0619a1b0160474ae98de4652c9a857b0c81736bff8fa25d",
+    "stage1a_train": "d842e03bf782e6db3f92b1418af623916beb071e1a6c75c74ec9c79db2c10514",
+    "stage1a_val": "d3b87aa187655ce9591bdfd90ed3a4e05c2497dca8e1dffbc3cd532160578c5e",
+    "stage1b_meta": "9a27f208f508b73c90252d66720a0382630a7beaac61eeb3143ea1c368058244",
+    "stage1b_train": "1325957154b567840bd1dce4214eb0a28df12536b83dbdf90e224016619b7461",
+    "stage1b_val": "23f5ac1b593e431fb1662ce034ef13e2dc25c34544752aa885494be22ceffaac",
+    "stage1b_val_meta": "c1c302473d8535d68e0de32e5106b64b0940d002347f8df03c15ea6d57d7b7b4",
+    "tokenizer": "aaa73c697ca35198fc621d6d33060c16991b7a5426b7719f3cffdad8ddb08799"
+  },
+  "total_processed_tokens": 300001280,
+  "total_windows": 1875008,
+  "updates": 58594
+}

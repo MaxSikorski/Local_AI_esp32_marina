@@ -1,0 +1,29 @@
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0x15 (USB_UART_CHIP_RESET),boot:0x8 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x4037a12e
+SPIWP:0xee
+Octal Flash Mode Enabled
+For OPI Flash, Use Default Flash Boot Mode
+mode:SLOW_RD, clock div:1
+load:0x3fce2810,len:0x1078
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xaf0
+load:0x403cb700,len:0x2e54
+entry 0x403c889c
+E (176) esp_core_dump_flash: No core dump partition found!
+E (176) esp_core_dump_flash: No core dump partition found!
+
+=== PocketGPT-S3 TIED30M dedup serial chat (30.46M tied, 20.24MB pack) ===
+Flash=33554432 PSRAM=yes free_psram=16381348
+[CONFIG] PASS layers=12 d_model=448 d_ff=1344 vocab=6144
+[TOKENIZER] PASS init_ms=72.027 free_psram=16018516
+[GATEUP_DUAL] PASS main_core=1 worker_core=0
+[TIED30M_PACKAGE] PASS footer=PGTIEDv1 bytes=20241616 q4=3f747bb82a16ae6b scales=9fec62a157d17c78 kept=d32af894239ee660 verify_ms=1429.8
+[LMHEAD_FP32_CACHE] PASS bytes=11010048 load_ms=1191.211 first4096_sum=362132 free_psram=4041464
+[TIED30M_HEAD_CRC] PASS crc32=0x6306a56a expected=0x6306a56a
+[SCALECACHE] PASS count=432768 bytes=1731072 load_ms=190.493 checksum4096=77803.350353241 free_psram=2304756
+[READY] Sentence-stop demo mode. Type a short message and press Enter.
+Stops on . ! ? or END. Try: hello | who are you? | i feel sad
+
+You> 

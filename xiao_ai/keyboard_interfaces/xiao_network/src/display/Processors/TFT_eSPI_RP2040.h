@@ -1,0 +1,499 @@
+         
+         
+         
+
+ 
+ 
+
+#ifndef _TFT_eSPI_RP2040H_
+#define _TFT_eSPI_RP2040H_
+
+#ifndef ARDUINO_ARCH_MBED
+  #include <LittleFS.h>
+  #define FONT_FS_AVAILABLE
+  #define SPIFFS LittleFS
+#endif
+
+ 
+#include "hardware/dma.h"
+#include "hardware/pio.h"
+#include "hardware/clocks.h"
+
+ 
+#define PROCESSOR_ID 0x2040
+
+ 
+#ifndef SUPPORT_TRANSACTIONS
+  #define SUPPORT_TRANSACTIONS
+#endif
+
+ 
+ 
+
+#if defined (TFT_PARALLEL_8_BIT) || defined (TFT_PARALLEL_16_BIT) || defined (RP2040_PIO_SPI)
+  #define RP2040_PIO_INTERFACE
+  #define RP2040_PIO_PUSHBLOCK
+#endif
+
+#if !defined (RP2040_PIO_INTERFACE) 
+   
+  #ifndef TFT_SPI_PORT
+    #define TFT_SPI_PORT 0
+  #endif
+
+  #if (TFT_SPI_PORT == 0)
+    #define SPI_X spi0
+  #else
+    #define SPI_X spi1
+  #endif
+
+   
+  #define SET_BUS_WRITE_MODE spi_set_format(SPI_X,  8, (spi_cpol_t)(TFT_SPI_MODE >> 1), (spi_cpha_t)(TFT_SPI_MODE & 0x1), SPI_MSB_FIRST)
+  #define SET_BUS_READ_MODE  spi_set_format(SPI_X,  8, (spi_cpol_t)0, (spi_cpha_t)0, SPI_MSB_FIRST)
+#else
+   
+  #define SET_BUS_WRITE_MODE
+  #define SET_BUS_READ_MODE
+#endif
+
+ 
+#if !defined(SPI_18BIT_DRIVER)
+  #define RP2040_DMA
+   
+  #define DMA_BUSY_CHECK dmaWait()
+#else
+  #define DMA_BUSY_CHECK
+#endif
+
+ 
+#if  defined (MHS_DISPLAY_TYPE)  && !defined (RPI_DISPLAY_TYPE)
+  #define RPI_DISPLAY_TYPE
+#endif
+
+#if !defined (RP2040_PIO_INTERFACE)  
+
+  #if  defined (MHS_DISPLAY_TYPE)  
+     
+    #define INIT_TFT_DATA_BUS hw_write_masked(&spi_get_hw(SPI_X)->cr0, (16 - 1) << SPI_SSPCR0_DSS_LSB, SPI_SSPCR0_DSS_BITS)
+  #else
+     
+    #define INIT_TFT_DATA_BUS   
+  #endif
+
+   
+  #define SPI_BUSY_CHECK while (spi_get_hw(SPI_X)->sr & SPI_SSPSR_BSY_BITS) {};     \
+                         while (spi_is_readable(SPI_X)) (void)spi_get_hw(SPI_X)->dr; \
+                         spi_get_hw(SPI_X)->icr = SPI_SSPICR_RORIC_BITS
+
+   
+  #if !defined (SUPPORT_TRANSACTIONS)
+    #define SUPPORT_TRANSACTIONS
+  #endif
+#else
+
+   
+   
+   
+   
+  #if defined (TFT_PARALLEL_8_BIT) || defined (TFT_PARALLEL_16_BIT)
+    #if defined (RP2040_PIO_CLK_DIV)
+      #if (RP2040_PIO_CLK_DIV > 0)
+        #define DIV_UNITS RP2040_PIO_CLK_DIV
+        #define DIV_FRACT 0
+      #else
+        #define DIV_UNITS 3
+        #define DIV_FRACT 0
+      #endif
+    #elif defined (TFT_PARALLEL_16_BIT)
+       
+      #if defined (HX8357C_DRIVER) || defined (SSD1963_DRIVER)
+        #define DIV_UNITS 1  
+      #elif defined (ILI9486_DRIVER) || defined (HX8357B_DRIVER) || defined (HX8357D_DRIVER)
+        #define DIV_UNITS 2  
+      #else  
+        #define DIV_UNITS 3  
+      #endif
+      #define DIV_FRACT 0
+    #else  
+      #define DIV_UNITS 2
+      #define DIV_FRACT 0  
+    #endif
+  #endif
+
+   
+  #if defined (TFT_PARALLEL_8_BIT) || defined (TFT_PARALLEL_16_BIT)
+    #define INIT_TFT_DATA_BUS pioinit(DIV_UNITS, DIV_FRACT);
+  #elif defined (RP2040_PIO_SPI)
+    #define INIT_TFT_DATA_BUS pioinit(SPI_FREQUENCY);
+  #endif
+
+  #define SPI_BUSY_CHECK
+
+   
+  #define PARALLEL_INIT_TFT_DATA_BUS  
+
+#endif
+
+
+ 
+#if defined (SMOOTH_FONT) && !defined (ARDUINO_ARCH_MBED)
+   
+   
+  #include <FS.h>
+#endif
+
+ 
+ 
+ 
+#ifndef TFT_DC
+  #define DC_C  
+  #define DC_D  
+#else
+  #if !defined (RP2040_PIO_INTERFACE) 
+     
+     
+    #if  defined (RPI_DISPLAY_TYPE) && !defined (MHS_DISPLAY_TYPE)
+      #define DC_C digitalWrite(TFT_DC, LOW);
+      #define DC_D digitalWrite(TFT_DC, HIGH);
+    #else
+      #define DC_C sio_hw->gpio_clr = (1ul << TFT_DC)
+      #define DC_D sio_hw->gpio_set = (1ul << TFT_DC)
+    #endif
+  #else
+     
+     
+    #define DC_C  WAIT_FOR_STALL; \
+                  tft_pio->sm[pio_sm].instr = pio_instr_clr_dc
+
+    #ifndef RM68120_DRIVER
+       
+      #define DC_D  tft_pio->sm[pio_sm].instr = pio_instr_set_dc
+    #else
+       
+      #define DC_D  WAIT_FOR_STALL; tft_pio->sm[pio_sm].instr = pio_instr_set_dc
+    #endif
+  #endif
+#endif
+
+ 
+ 
+ 
+#ifndef TFT_CS
+  #define CS_L  
+  #define CS_H  
+#else
+  #if !defined (RP2040_PIO_INTERFACE)  
+    #if  defined (RPI_DISPLAY_TYPE) && !defined (MHS_DISPLAY_TYPE)
+      #define CS_L digitalWrite(TFT_CS, LOW);
+      #define CS_H digitalWrite(TFT_CS, HIGH);
+    #else
+      #define CS_L sio_hw->gpio_clr = (1ul << TFT_CS)
+      #define CS_H sio_hw->gpio_set = (1ul << TFT_CS)
+    #endif
+  #else  
+    #define CS_L sio_hw->gpio_clr = (1ul << TFT_CS)
+    #define CS_H WAIT_FOR_STALL; sio_hw->gpio_set = (1ul << TFT_CS)
+  #endif
+#endif
+
+ 
+ 
+ 
+ 
+#ifdef TFT_RD
+  #if (TFT_RD >= 0)
+    #define RD_L sio_hw->gpio_clr = (1ul << TFT_RD)
+     
+    #define RD_H sio_hw->gpio_set = (1ul << TFT_RD)
+     
+  #else
+    #define RD_L
+    #define RD_H
+  #endif
+#else
+  #define TFT_RD -1
+  #define RD_L
+  #define RD_H
+#endif
+
+ 
+ 
+ 
+#if !defined (TFT_PARALLEL_8_BIT) && !defined (TFT_PARALLEL_16_BIT)  
+  #ifdef TFT_WR
+    #define WR_L digitalWrite(TFT_WR, LOW)
+    #define WR_H digitalWrite(TFT_WR, HIGH)
+  #endif
+#else
+   
+#endif
+
+ 
+ 
+ 
+#if !defined (RP2040_PIO_INTERFACE) 
+  #if !defined TOUCH_CS || (TOUCH_CS < 0)
+    #define T_CS_L  
+    #define T_CS_H  
+  #else
+    #define T_CS_L digitalWrite(TOUCH_CS, LOW)
+    #define T_CS_H digitalWrite(TOUCH_CS, HIGH)
+  #endif
+#else
+  #ifdef TOUCH_CS
+    #error Touch screen not supported in parallel or SPI PIO mode, use a separate library.
+  #endif
+#endif
+
+ 
+ 
+ 
+#ifndef TFT_MISO
+  #define TFT_MISO -1
+#endif
+
+ 
+ 
+ 
+#if !defined (RP2040_PIO_INTERFACE)  
+
+  #if  defined (SPI_18BIT_DRIVER)  
+
+     
+    #define tft_Write_8(C)      spi_get_hw(SPI_X)->dr = (uint32_t)(C); \
+                                while (spi_get_hw(SPI_X)->sr & SPI_SSPSR_BSY_BITS) {}; \
+
+     
+    #define tft_Write_8N(B)   while (!spi_is_writable(SPI_X)){}; \
+                             spi_get_hw(SPI_X)->dr = (uint8_t)(B)
+
+     
+    #define tft_Write_16(C)  tft_Write_8N(((C) & 0xF800)>>8); \
+                             tft_Write_8N(((C) & 0x07E0)>>3); \
+                             tft_Write_8N(((C) & 0x001F)<<3)
+
+     
+    #define tft_Write_16N(C)  tft_Write_8N(((C) & 0xF800)>>8); \
+                              tft_Write_8N(((C) & 0x07E0)>>3); \
+                              tft_Write_8N(((C) & 0x001F)<<3)
+
+     
+    #define tft_Write_16S(C) tft_Write_8N((C) & 0xF8); \
+                             tft_Write_8N(((C) & 0xE000)>>11 | ((C) & 0x07)<<5); \
+                             tft_Write_8N(((C) & 0x1F00)>>5)
+     
+    #define tft_Write_32(C)  tft_Write_8N(C>>24); \
+                             tft_Write_8N(C>>16); \
+                             tft_Write_8N(C>>8);  \
+                             tft_Write_8N(C)
+
+     
+    #define tft_Write_32C(C,D) tft_Write_8N(C>>8); \
+                               tft_Write_8N(C);    \
+                               tft_Write_8N(D>>8); \
+                               tft_Write_8N(D)
+
+     
+    #define tft_Write_32D(C) tft_Write_8N(C>>8); \
+                             tft_Write_8N(C);    \
+                             tft_Write_8N(C>>8); \
+                             tft_Write_8N(C)
+
+   
+   
+   
+  #else
+    #if  defined (MHS_DISPLAY_TYPE)  
+       
+      #define tft_Write_8(C)      while (spi_get_hw(SPI_X)->sr & SPI_SSPSR_BSY_BITS) {}; \
+                                  hw_write_masked(&spi_get_hw(SPI_X)->cr0, (16 - 1) << SPI_SSPCR0_DSS_LSB, SPI_SSPCR0_DSS_BITS); \
+                                  spi_get_hw(SPI_X)->dr = (uint32_t)((C) | ((C)<<8)); \
+                                  while (spi_get_hw(SPI_X)->sr & SPI_SSPSR_BSY_BITS) {}; \
+
+       
+
+      #define tft_Write_16(C)     while (!spi_is_writable(SPI_X)){}; spi_get_hw(SPI_X)->dr = (uint32_t)(C)
+
+      #define tft_Write_16N(C)    while (!spi_is_writable(SPI_X)){}; spi_get_hw(SPI_X)->dr = (uint32_t)(C)
+
+      #define tft_Write_16S(C)    while (!spi_is_writable(SPI_X)){}; spi_get_hw(SPI_X)->dr = (uint32_t)(C)<<8 | (C)>>8
+
+      #define tft_Write_32(C)     spi_get_hw(SPI_X)->dr = (uint32_t)((C)>>16); spi_get_hw(SPI_X)->dr = (uint32_t)(C)
+
+      #define tft_Write_32C(C,D)  spi_get_hw(SPI_X)->dr = (uint32_t)(C); spi_get_hw(SPI_X)->dr = (uint32_t)(D)
+
+      #define tft_Write_32D(C)    spi_get_hw(SPI_X)->dr = (uint32_t)(C); spi_get_hw(SPI_X)->dr = (uint32_t)(C)
+
+    #elif  defined (RPI_DISPLAY_TYPE)  
+      #define tft_Write_8(C)   spi.transfer(C); spi.transfer(C)
+      #define tft_Write_16(C)  spi.transfer((uint8_t)((C)>>8));spi.transfer((uint8_t)((C)>>0))
+      #define tft_Write_16N(C) spi.transfer((uint8_t)((C)>>8));spi.transfer((uint8_t)((C)>>0))
+      #define tft_Write_16S(C) spi.transfer((uint8_t)((C)>>0));spi.transfer((uint8_t)((C)>>8))
+
+      #define tft_Write_32(C) \
+        tft_Write_16((uint16_t) ((C)>>16)); \
+        tft_Write_16((uint16_t) ((C)>>0))
+
+      #define tft_Write_32C(C,D) \
+        spi.transfer(0); spi.transfer((C)>>8); \
+        spi.transfer(0); spi.transfer((C)>>0); \
+        spi.transfer(0); spi.transfer((D)>>8); \
+        spi.transfer(0); spi.transfer((D)>>0)
+
+      #define tft_Write_32D(C) \
+        spi.transfer(0); spi.transfer((C)>>8); \
+        spi.transfer(0); spi.transfer((C)>>0); \
+        spi.transfer(0); spi.transfer((C)>>8); \
+        spi.transfer(0); spi.transfer((C)>>0)
+
+    #elif  defined (ILI9225_DRIVER)  
+
+       
+      #define tft_Write_8(C)      spi.transfer(C);
+
+      #define tft_Write_16(C)     spi.transfer16(C)
+
+      #define tft_Write_16N(C)    spi.transfer16(C)
+
+      #define tft_Write_16S(C)    spi.transfer16((C)<<8 | (C)>>8)
+
+      #define tft_Write_32(C)     spi.transfer16((C)>>16); spi.transfer16(C)
+
+      #define tft_Write_32C(C,D)  spi.transfer16(C); spi.transfer16(D)
+
+      #define tft_Write_32D(C)    spi.transfer16(C); spi.transfer16(C)
+
+    #else
+
+       
+      #define tft_Write_8(C)      while (spi_get_hw(SPI_X)->sr & SPI_SSPSR_BSY_BITS) {}; \
+                                  hw_write_masked(&spi_get_hw(SPI_X)->cr0, (8 - 1) << SPI_SSPCR0_DSS_LSB, SPI_SSPCR0_DSS_BITS); \
+                                  spi_get_hw(SPI_X)->dr = (uint32_t)(C); \
+                                  while (spi_get_hw(SPI_X)->sr & SPI_SSPSR_BSY_BITS) {}; \
+                                  hw_write_masked(&spi_get_hw(SPI_X)->cr0, (16 - 1) << SPI_SSPCR0_DSS_LSB, SPI_SSPCR0_DSS_BITS)
+
+       
+
+      #define tft_Write_16(C)     while (!spi_is_writable(SPI_X)){}; spi_get_hw(SPI_X)->dr = (uint32_t)(C)
+
+      #define tft_Write_16N(C)    while (!spi_is_writable(SPI_X)){}; spi_get_hw(SPI_X)->dr = (uint32_t)(C)
+
+      #define tft_Write_16S(C)    while (!spi_is_writable(SPI_X)){}; spi_get_hw(SPI_X)->dr = (uint32_t)(C)<<8 | (C)>>8
+
+      #define tft_Write_32(C)     spi_get_hw(SPI_X)->dr = (uint32_t)((C)>>16); spi_get_hw(SPI_X)->dr = (uint32_t)(C)
+
+      #define tft_Write_32C(C,D)  spi_get_hw(SPI_X)->dr = (uint32_t)(C); spi_get_hw(SPI_X)->dr = (uint32_t)(D)
+
+      #define tft_Write_32D(C)    spi_get_hw(SPI_X)->dr = (uint32_t)(C); spi_get_hw(SPI_X)->dr = (uint32_t)(C)
+
+    #endif  
+  #endif
+
+#else  
+
+   
+   
+  #define WAIT_FOR_STALL  tft_pio->fdebug = pull_stall_mask; while (!(tft_pio->fdebug & pull_stall_mask))
+
+   
+  #define WAIT_FOR_FIFO_FREE(S) while (((tft_pio->flevel >> (pio_sm * 8)) & 0x000F) > (8-S)){}
+
+   
+  #define WAIT_FOR_FIFO_5_FREE while ((tft_pio->flevel) & (0x000c << (pio_sm * 8))){}
+
+   
+  #define WAIT_FOR_FIFO_1_FREE while ((tft_pio->flevel) & (0x0008 << (pio_sm * 8))){}
+
+   
+  #define WAIT_FOR_FIFO_EMPTY  while(!(tft_pio->fstat & (1u << (PIO_FSTAT_TXEMPTY_LSB + pio_sm))))
+
+   
+  #define TX_FIFO  tft_pio->txf[pio_sm]
+
+   
+  #define GPIO_DIR_MASK 0
+
+  #if  defined (SPI_18BIT_DRIVER)  || defined (SSD1963_DRIVER)  
+       
+       
+       
+      #define tft_Write_8(C)      tft_pio->sm[pio_sm].instr = pio_instr_jmp8; \
+                                  TX_FIFO = (C); \
+                                  WAIT_FOR_STALL
+
+       
+      #define tft_Write_8L(C)     WAIT_FOR_STALL; \
+                                  tft_pio->sm[pio_sm].instr = pio_instr_jmp8; \
+                                  TX_FIFO = (C)
+
+       
+
+      #define tft_Write_16(C)     WAIT_FOR_FIFO_FREE(1); TX_FIFO = ((((uint32_t)(C) & 0xF800)<<8) | (((C) & 0x07E0)<<5) | (((C) & 0x001F)<<3))
+
+      #define tft_Write_16N(C)    WAIT_FOR_FIFO_FREE(1); TX_FIFO = ((((uint32_t)(C) & 0xF800)<<8) | (((C) & 0x07E0)<<5) | (((C) & 0x001F)<<3))
+
+      #define tft_Write_16S(C)    WAIT_FOR_FIFO_FREE(1); TX_FIFO = ((((uint32_t)(C) & 0xF8) << 16) | (((C) & 0xE000)>>3) | (((C) & 0x07)<<13) | (((C) & 0x1F00)>>5))
+
+      #define tft_Write_32(C)     WAIT_FOR_FIFO_FREE(2); TX_FIFO = ((C)>>8); WAIT_FOR_STALL; tft_Write_8(C)
+
+      #define tft_Write_32C(C,D)  WAIT_FOR_FIFO_FREE(2); TX_FIFO = (((C)<<8) | ((D)>>8)); tft_Write_8L(D)
+
+      #define tft_Write_32D(C)    WAIT_FOR_FIFO_FREE(2); TX_FIFO = (((C)<<8) | ((C)>>8)); tft_Write_8L(C)
+
+  #else  
+     
+     
+     
+    #if defined (TFT_PARALLEL_8_BIT) || defined (RP2040_PIO_SPI)
+      #define tft_Write_8(C)      tft_pio->sm[pio_sm].instr = pio_instr_jmp8; \
+                                  TX_FIFO = (C); \
+                                  WAIT_FOR_STALL
+    #else  
+      #define tft_Write_8(C)      TX_FIFO = (C); \
+                                  WAIT_FOR_STALL
+    #endif
+
+       
+
+      #define tft_Write_16(C)     WAIT_FOR_FIFO_FREE(1); TX_FIFO = (C)
+
+      #define tft_Write_16N(C)    WAIT_FOR_FIFO_FREE(1); TX_FIFO = (C)
+
+      #define tft_Write_16S(C)    WAIT_FOR_FIFO_FREE(1); TX_FIFO = ((C)<<8) | ((C)>>8)
+
+      #define tft_Write_32(C)     WAIT_FOR_FIFO_FREE(2); TX_FIFO = ((C)>>16); TX_FIFO = (C)
+
+      #define tft_Write_32C(C,D)  WAIT_FOR_FIFO_FREE(2); TX_FIFO = (C); TX_FIFO = (D)
+
+      #define tft_Write_32D(C)    WAIT_FOR_FIFO_FREE(2); TX_FIFO = (C); TX_FIFO = (C)
+  #endif
+#endif
+
+#ifndef tft_Write_16N
+  #define tft_Write_16N tft_Write_16
+#endif
+
+ 
+ 
+ 
+#if !defined (RP2040_PIO_INTERFACE) 
+  #if defined (TFT_SDA_READ)
+     
+    #define TFT_eSPI_ENABLE_8_BIT_READ  
+    #define SCLK_L digitalWrite(TFT_SCLK, LOW)
+    #define SCLK_H digitalWrite(TFT_SCLK, LOW)
+  #else
+     
+    #define tft_Read_8() spi.transfer(0)
+  #endif
+#endif
+ 
+ 
+ 
+#if defined(ARDUINO_ARCH_RP2040)
+
+  #define ltoa itoa
+
+#endif
+
+#endif  

@@ -1,0 +1,23 @@
+
+You: what can you do?
+PocketGPT: thinking... [TIED30M Q4/FP16 dedup]
+[CHAT] canonical: [what can you do?]
+[CHAT] native prompt question_tokens=5 total_tokens=7 encode_us=440
+  ids: 4 694 385 342 460 6109 5
+[CHAT] END step=14 generated=14
+PocketGPT: I can chat, answer simple questions, and do tiny math.
+[RAW] I can chat, answer simple questions, and do tiny math.
+[STATS] tokens=14 stopped=yes total_ms=13681.0 generation_ms=9756.7 gen_tps=1.4349 layers_ms=11555.0 lm_head_ms=1852.9
+[PROFILE] layer_load_ms=0.0 layer_map_ms=144.9 mmap_fallbacks=0
+[OPS] normA=94.4 q=963.2 k=479.3 v=479.7 attn=88.8 o=965.4 normF=93.8 gate=5751.7 up=5755.7 swiglu=260.0 down=2842.6
+[GATEUP] pair_ms=5761.3 gate_work_ms=5751.7 up_work_ms=5755.7
+[DOWNSPLIT] pair_ms=2842.6 main_work_ms=2833.6 worker_work_ms=2837.0
+[QSPLIT] pair_ms=963.2 main_work_ms=957.3 worker_work_ms=957.5
+[OSPLIT] pair_ms=965.4 main_work_ms=958.9 worker_work_ms=959.5
+[KVDUAL] pair_ms=485.5 k_work_ms=479.3 v_work_ms=479.7
+[ATTNDUAL] pair_ms=77.1 main_work_ms=73.0 worker_work_ms=71.8
+[ROPEKV] rope_ms=7.4 kvstore_ms=3.1 combined_ms=10.5
+[ROPECACHE] build_ms=2.7 hits=231 misses=21
+[SWIGLUDUAL] pair_ms=260.0 main_work_ms=253.4 worker_work_ms=254.3
+
+You> 

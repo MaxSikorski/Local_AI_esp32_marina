@@ -1,0 +1,9 @@
+# Name,        Type, SubType, Offset,    Size,      Flags
+nvs,           data, nvs,     0x9000,    0x5000,
+otadata,       data, ota,     0xe000,    0x2000,
+app0,          app,  ota_0,   0x10000,   0x400000,
+v5e_q4,        data, 0x40,    0x410000,  0x0E00000,
+v5e_scales,    data, 0x41,    0x1210000, 0x0100000,
+v5e_kept,      data, 0x42,    0x1310000, 0x0B00000,
+v5e_manifest,  data, 0x43,    0x1E10000, 0x0020000,
+tokenfs,       data, spiffs,  0x1E30000, 0x0080000,

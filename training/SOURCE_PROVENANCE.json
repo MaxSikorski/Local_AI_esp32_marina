@@ -1,0 +1,122 @@
+[
+  {
+    "path": "pocketlm/pocketlm_v1.py",
+    "original_sha256": "c672ea3555878652bb831d9958c0a918d3377b1ddcf0d38b2ad3b68642e4735b",
+    "published_sha256": "adabb88cea0abb688384f8000221c202a04b468a116d824f69af3c100d0c61ec",
+    "change": "Ordinary Python comments removed; AST unchanged. Historical names retained for imports and lineage."
+  },
+  {
+    "path": "pocketlm/training/pocketlm_30m.py",
+    "original_sha256": "a37c3920a8623e7ebf3d851016c2b3844ee7445663feb0987c9cca8e7314572c",
+    "published_sha256": "a37c3920a8623e7ebf3d851016c2b3844ee7445663feb0987c9cca8e7314572c",
+    "change": "Ordinary Python comments removed; AST unchanged. Historical names retained for imports and lineage."
+  },
+  {
+    "path": "pocketlm/quantization/kv_cache_int8.py",
+    "original_sha256": "f0f638db36e3eee773f73994043d09589f5c286f7b3f3716ca8d0c89229821e8",
+    "published_sha256": "7198b840e8cdfeeeb0f1478e80fc76b76899b5bd384083aecaaf88fa72b2c417",
+    "change": "Ordinary Python comments removed; AST unchanged. Historical names retained for imports and lineage."
+  },
+  {
+    "path": "pocketlm/training/train_friend_base_30m_v2_300m_v1.py",
+    "original_sha256": "09f24315915bd301d9e83fc279fc955920c6674cf745d35b247fdd1d0377e76a",
+    "published_sha256": "bf372961ea86b838ae213f28fb2d6311bf326a3e7e7a20b1e9edf0d2ee502af0",
+    "change": "Ordinary Python comments removed; AST unchanged. Historical names retained for imports and lineage."
+  },
+  {
+    "path": "pocketlm/training/audit_friend_base_v2_training_stream_v1.py",
+    "original_sha256": "91b318f2da519a40cabb91b6fb291bc1ce15c3be2b7933d3e1fd68303e64762f",
+    "published_sha256": "423df9f8acfcd04a35aea9cd5f425aaa0906ecd4c3abbbec3ef4e36cbb884a2c",
+    "change": "Ordinary Python comments removed; AST unchanged. Historical names retained for imports and lineage."
+  },
+  {
+    "path": "pocketlm/training/train_friend_base_30m.py",
+    "original_sha256": "cd950b56075bbb5e3270eb0445541ec1dc3b73e26af347d3128f56baa73e4d5c",
+    "published_sha256": "b61ac30d0ee8d41234f7774a08573af4f6eeaa6c9360f15bf188e67400d6f1e5",
+    "change": "Ordinary Python comments removed; AST unchanged. Historical names retained for imports and lineage."
+  },
+  {
+    "path": "pocketlm/training/train_pretrain_30m.py",
+    "original_sha256": "df17973afd71ff78809532c64f03a90abf662a56fc052b4ca6b72de9b69b7ec3",
+    "published_sha256": "eb6086523203e9792a718cfcea81625221923894971afce654aec8dc0fb6ce19",
+    "change": "Ordinary Python comments removed; AST unchanged. Historical names retained for imports and lineage."
+  },
+  {
+    "path": "pocketlm/training/build_pretrain_corpus.py",
+    "original_sha256": "dc0951f94f56bf67b9d7451ae64c16970053f4a26925bebbf29c2a2a56fdd6d8",
+    "published_sha256": "e27dd40417adb16ac50b0c44f0520e6dcb380c04a719ac9bffd94420b7ba9d3d",
+    "change": "Ordinary Python comments removed; AST unchanged. Historical names retained for imports and lineage."
+  },
+  {
+    "path": "pocketlm/training/build_pretrain_stage1b.py",
+    "original_sha256": "4b021a9480269edb14d1ef96d2a9bd206fc61cd228fe26df5d0af4d2c829a56d",
+    "published_sha256": "ce50f8f7565a73fa5469500e174c8b88fba8891a03d29f95f4e9e1b276c93db5",
+    "change": "Ordinary Python comments removed; AST unchanged. Historical names retained for imports and lineage."
+  },
+  {
+    "path": "pocketlm/training/tokenize_pretrain.py",
+    "original_sha256": "a6fdb625af50b90f5b853ab9c0e04349c2994b3071d858a3bcd1093e9ea5ae39",
+    "published_sha256": "20415e9d0e5c7f22c1064daf4e6443a95ed00fdf21f764df4d8841a43df375fd",
+    "change": "Ordinary Python comments removed; AST unchanged. Historical names retained for imports and lineage."
+  },
+  {
+    "path": "pocketlm/training/tokenize_pretrain_stage1b.py",
+    "original_sha256": "b2c6621971f39a25c02908cf28d19f085f223449808c71a05396a1421af5d114",
+    "published_sha256": "50e0047e5ec49aac0e26ff7f6303cb31dd7d74c62af0fe1fee92da0d7b26f194",
+    "change": "Ordinary Python comments removed; AST unchanged. Historical names retained for imports and lineage."
+  },
+  {
+    "path": "pocketlm/training/build_stage1b_validation.py",
+    "original_sha256": "a14e9b6cf00613907d279f8eea8d9b1b9c80bb5bae20964e1853353d083b98d9",
+    "published_sha256": "fbb6e5ce60829c69644039c12db21a813688ded1ea27a1f64aa850e4bbc3d589",
+    "change": "Ordinary Python comments removed; AST unchanged. Historical names retained for imports and lineage."
+  },
+  {
+    "path": "pocketlm/training/tokenize_stage1b_validation.py",
+    "original_sha256": "a8228ad1216ca86d7325ff9de53c364079553984b0906b3280b77134bea68535",
+    "published_sha256": "e90d81c0b0c797116a8c17d9d65cd7d18ac8396e2a6dcba55744a821db7f6a32",
+    "change": "Ordinary Python comments removed; AST unchanged. Historical names retained for imports and lineage."
+  },
+  {
+    "path": "pocketlm/training/build_friend_base_chat_corpus_v1.py",
+    "original_sha256": "00e1330cbdaa6a645ea47c62449e9b8c6dd628a1b5b31c1b60ebcfd1d8c9f39a",
+    "published_sha256": "38f99fcb160a0c09aad4e0a761f42f8a77425a668bb75bb5b972b80d111a133b",
+    "change": "Ordinary Python comments removed; AST unchanged. Historical names retained for imports and lineage."
+  },
+  {
+    "path": "pocketlm/training/build_friend_base_chat_corpus_v2.py",
+    "original_sha256": "f38794aebb311c8054895ccff3cecee42d3885f5d0e1817dd089a130cddfcddb",
+    "published_sha256": "630b50f25e52daffc382bc8e827cf900107ee0244b52d8207e4e10ccff94c1e2",
+    "change": "Ordinary Python comments removed; AST unchanged. Historical names retained for imports and lineage."
+  },
+  {
+    "path": "pocketlm/training/tokenize_friend_base_chat_corpus_v2.py",
+    "original_sha256": "1d827f6f38a48039c6b9f316f984e3eeb93f137aef3953ca85995bcf10bfc829",
+    "published_sha256": "e6cf0b76f2538221949ab9f458f86ba2f9e9d74414fa720fc7ec1ae02f3b84ec",
+    "change": "Ordinary Python comments removed; AST unchanged. Historical names retained for imports and lineage."
+  },
+  {
+    "path": "pocketlm/training/benchmark_training.py",
+    "original_sha256": "626b843f425c6ba8f5c720cbd253b855ee2107cd486f3beb879aeb849f4fa20d",
+    "published_sha256": "8894bdf71dc863413ab2def40ff8312adb46df63cf8404fa843748ea444d4315",
+    "change": "Ordinary Python comments removed; AST unchanged. Historical names retained for imports and lineage."
+  },
+  {
+    "path": "pocketlm/tokenizer/build_tokenizer_corpus.py",
+    "original_sha256": "ce016699cd2673b3a48c58ad52b9be8256cb0e0bdc8bf598d2629dd1d47cdc99",
+    "published_sha256": "3ee33b66c043036a37f35a914afcdfa61985d08306971028483fe222478eb216",
+    "change": "Ordinary Python comments removed; AST unchanged. Historical names retained for imports and lineage."
+  },
+  {
+    "path": "pocketlm/tokenizer/train_tokenizer_candidates.py",
+    "original_sha256": "6aa62244b97cc839f53784adbcc120e407673e0ae91b81fda3330dcdf85aedbb",
+    "published_sha256": "3577e94c71faf7be77fd7d8b6498fb259cb116c8cfcf1ea3ad07194af0f3f39b",
+    "change": "Ordinary Python comments removed; AST unchanged. Historical names retained for imports and lineage."
+  },
+  {
+    "path": "pocketlm/training/friend_base_v1_config.py",
+    "original_sha256": "53c3ebcc374ec8e77f523ef7e2b9907dedb689c41af088358a8c1a28df448d07",
+    "published_sha256": "8bd177ff00120bf4b958c6f49ce3b8350de2743e026400e8d751f0fb7631d1eb",
+    "change": "Ordinary Python comments removed; AST unchanged. Historical names retained for imports and lineage."
+  }
+]

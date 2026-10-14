@@ -1,0 +1,26 @@
+{
+  "seed": 42,
+  "parameters": 30460864,
+  "seq_len": 160,
+  "batch_size": 32,
+  "updates": 58594,
+  "optimizer": "AdamW",
+  "betas": [
+    0.9,
+    0.95
+  ],
+  "eps": 1e-08,
+  "matrix_weight_decay": 0.1,
+  "other_weight_decay": 0.0,
+  "clip": 1.0,
+  "peak_lr": 0.0002,
+  "min_lr": 2e-05,
+  "warmup_updates": 1000,
+  "lr_indexing": "one-based; cosine reaches min at final update",
+  "objective": "full-LM shifted CE, all tokens including roles/END/EOS",
+  "auxiliary": "NONE",
+  "initialization": "random; no starting checkpoint",
+  "save_every": 1000,
+  "eval_holdout_windows": 256,
+  "probe_cap": 40
+}
