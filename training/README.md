@@ -74,16 +74,26 @@ python3 -m pocketlm.training.train_friend_base_30m_v2_300m_v1 --train --device m
 
 `--train` performs the full training run and writes checkpoints. `mps` selects Apple Silicon acceleration; `cpu` and `cuda` are also accepted. Paths resolve relative to this `training` directory. Data-preparation scripts may download datasets or create files, so inspect their inputs and output locations before running them.
 
-## What is available to reproduce the project?
+## Run the released model on your board
 
-**For deployment:** the released quantized weights and tokenizer can be downloaded using the [installation guide](../docs/ASSETS.md).
+**The trained deployment weights and tokenizer are available in [GitHub Releases](https://github.com/mmm1712/Local_AI_esp32/releases/tag/v0.1.0-model-assets). You do not need to train the model again.** Download the package for your board, build the firmware and follow the [installation guide](../docs/ASSETS.md).
 
-**For repeating the historical training run:** the original tokenized data streams, local examples, validation arrays and a complete historical dependency lock are not bundled. Some general-data revisions and the exact tokenizer training mix remain incompletely documented. The later refinement/export stages are also not fully packaged. See [data provenance](../docs/DATA_PROVENANCE.md).
+## Repeating the original training run
 
-The released SentencePiece tokenizer preserves the original vocabulary and normalization behavior, but training-path metadata was removed. Its file hash therefore differs from the original tokenizer hash expected by the historical runner. Downloading it alone does not satisfy the runner's original input checks. Do not bypass those checks to claim an exact reproduction.
+These original scripts document how the base model was trained. An exact repeat would also require historical materials that are not all included or fully documented:
+
+- The exact dataset versions and prepared token sequences used during training.
+- The exact collection of texts used to train the tokenizer.
+- The local conversational examples, their source records and the validation data.
+- The exact versions of all libraries used for the original run.
+- The complete sequence of later refinement and export steps.
+
+Training again with different inputs or software may produce different weights. **These limitations concern repeating the training process; the released weights and tokenizer are available for running the existing model.** See [data provenance](../docs/DATA_PROVENANCE.md) for the remaining details. Dataset downloads and redistribution are subject to each source's license; a download script does not itself grant permission to redistribute the data.
 
 <details>
 <summary>Historical verification and source-file details</summary>
+
+The released SentencePiece tokenizer preserves the original vocabulary and normalization behavior, but training-path metadata was removed. Its file hash therefore differs from the original tokenizer hash expected by the historical runner. Downloading it alone does not satisfy the runner's original input checks. Do not bypass those checks to claim an exact reproduction.
 
 The retained update-zero checkpoint matched all 111 freshly initialized state tensors with seed 42 and had an empty optimizer. The final optimizer states recorded step 58,594, supporting random initialization for Base V2.
 

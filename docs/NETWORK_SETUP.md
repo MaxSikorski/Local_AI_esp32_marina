@@ -22,7 +22,7 @@ You need:
 
 Disconnect power before attaching the XIAO to the display. Follow the matching pin labels and orientation in the [Seeed Round Display assembly guide](https://wiki.seeedstudio.com/get_start_round_display/); do not offset the header by a pin. Connect USB to the XIAO. No external breadboard wiring or microSD model files are required for this network sketch.
 
-**Already using offline PocketGPT?** Installing this Arduino sketch with its default partition map can overwrite local model data. Keep a private backup and the matching local model/SD assets before switching. See [BUILD.md](BUILD.md) for returning to the local firmware. Never upload a full Flash backup to GitHub.
+**Already using offline PocketGPT?** Installing this Arduino sketch with its default partition map can overwrite local model data. Keep a private backup and the matching local model/SD assets before switching. See the [local installation guide](ASSETS.md) for returning to PocketGPT. Never upload a full Flash backup to GitHub.
 
 ## 2. Install Arduino dependencies
 
@@ -114,7 +114,7 @@ Allow inbound TCP 11434 only on a trusted LAN. Avoid guest-network client isolat
 
 After the sketch prints `Ready`, enter a question in Serial Monitor or type on the touchscreen and press **GO**. Use **123/ABC** to switch keyboard pages, backspace to delete, and space to separate words. Begin with a short prompt such as `Hello`.
 
-The actual answer depends on the selected model; this guide does not provide a fabricated success transcript. Generation is synchronous, so wait for a response before pressing GO again. This sketch sends individual prompts, not a stored multi-turn conversation.
+Wait for a response before pressing GO again. Each request sends an individual prompt; the sketch does not keep a conversation history.
 
 Once setup is complete, send `/setup` in Serial Monitor to change backend or settings. If setup is incomplete and you need to start over, reset the board; `/setup` is recognized in chat mode, not every setup stage.
 

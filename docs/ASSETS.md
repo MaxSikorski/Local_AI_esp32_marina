@@ -1,45 +1,74 @@
-# Download model assets and install locally
+# Run PocketGPT on ESP32-S3
 
-The deployment weights and tokenizer are available in [GitHub Releases](https://github.com/mmm1712/Local_AI_esp32/releases/tag/v0.1.0-model-assets). Build the firmware from this repository and use the package matching your board. These files support the published deployment; they do not include the full historical training corpus or make exact retraining reproducible.
+The model runs on the board without Wi-Fi or an API key. You will download the trained model, build the firmware and install both. Follow **Prepare your computer**, then choose **DevKit** or **XIAO** below.
 
-| Board | Download |
-|---|---|
-| ESP32-S3 DevKit, 32 MB Flash / 16 MB PSRAM | [pocketgpt-devkit-assets-v0.1.0.zip](https://github.com/mmm1712/Local_AI_esp32/releases/download/v0.1.0-model-assets/pocketgpt-devkit-assets-v0.1.0.zip) |
-| XIAO ESP32-S3, 8 MB Flash / 8 MB PSRAM, Round Display and microSD | [pocketgpt-xiao-assets-v0.1.0.zip](https://github.com/mmm1712/Local_AI_esp32/releases/download/v0.1.0-model-assets/pocketgpt-xiao-assets-v0.1.0.zip) |
+## Prepare your computer
 
-Also download [SHA256SUMS.txt](https://github.com/mmm1712/Local_AI_esp32/releases/download/v0.1.0-model-assets/SHA256SUMS.txt). Keep all three release files together; on macOS/Linux, run `shasum -a 256 -c SHA256SUMS.txt` before extracting. Both archives must be present for every line to report OK. Windows PowerShell can use `Get-FileHash filename.zip -Algorithm SHA256` to compare each hash manually. Each archive also contains ASSET_MANIFEST.json and its own checksum list.
+You need Git, Python 3, a USB data cable and the matching hardware listed below. These commands use macOS/Linux shell syntax; builds were checked on Apple Silicon macOS.
 
-MIT applies to the author's rights in these released weights/tokenizer. Preserve MODEL_LICENSE and ATTRIBUTION.md. See [release provenance and attribution](MODEL_RELEASE_NOTES.md). Training datasets are not included.
+### 1. Download the source and install tools
 
-## Before installation
-
-These commands write the selected board's Flash and replace its current application. Keep any recovery backup private. Use the matching board and asset package, close Serial Monitor before flashing, and replace `/dev/cu.usbmodemYOURPORT` with the actual port (`COM3` is an example on Windows). Never use the DevKit addresses on XIAO. Do not use force flags to bypass secure-boot, encryption or compatibility checks.
-
-Install Python tools in an environment of your choice:
+Run in a folder where you want to keep the project:
 
 ```sh
-python3 -m pip install esptool==4.11.0
+git clone https://github.com/mmm1712/Local_AI_esp32.git
+cd Local_AI_esp32
+export POCKETGPT_REPO="$PWD"
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install platformio==6.1.19 esptool==4.11.0
 ```
 
-The examples below use esptool 4 command names. The [Espressif documentation](https://docs.espressif.com/projects/esptool/en/release-v4/esp32/esptool/basic-commands.html) explains write_flash and verify_flash. The default Flash mode/frequency are retained from the built bootloader; use the pinned board configuration from this project.
+Keep this terminal open for the remaining steps. If you already downloaded the source as a ZIP, open its extracted folder and start at `export POCKETGPT_REPO="$PWD"`.
+
+### 2. Download the model for your board
+
+| Hardware | Model package |
+|---|---|
+| ESP32-S3 DevKit, **32 MB octal Flash / 16 MB PSRAM** | [DevKit ZIP](https://github.com/mmm1712/Local_AI_esp32/releases/download/v0.1.0-model-assets/pocketgpt-devkit-assets-v0.1.0.zip) |
+| XIAO ESP32-S3, **8 MB Flash / 8 MB PSRAM**, Seeed Round Display and microSD | [XIAO ZIP](https://github.com/mmm1712/Local_AI_esp32/releases/download/v0.1.0-model-assets/pocketgpt-xiao-assets-v0.1.0.zip) |
+
+Download [SHA256SUMS.txt](https://github.com/mmm1712/Local_AI_esp32/releases/download/v0.1.0-model-assets/SHA256SUMS.txt) into the same folder as your ZIP. In that folder, check the download:
+
+```sh
+shasum -a 256 --ignore-missing -c SHA256SUMS.txt
+```
+
+Continue only when **your downloaded ZIP is listed with `OK`**. You only need one board's ZIP. Extract it outside the source folder and keep its included license and attribution files. On Windows, use `Get-FileHash filename.zip -Algorithm SHA256` and compare with the matching line in `SHA256SUMS.txt`.
+
+### 3. Find your USB port
+
+Connect the board, then run:
+
+```sh
+python -m serial.tools.list_ports
+export POCKETGPT_PORT=/dev/cu.usbmodemYOURPORT
+```
+
+Replace the example with your board's port, such as `/dev/ttyACM0` on Linux. Close Serial Monitor before flashing. Installation replaces the current application; keep any recovery backup private. Use only the addresses for your selected board.
 
 ## DevKit
 
-1. Extract the DevKit ZIP outside the source tree. It contains `pocketgpt-devkit-assets/devkit/weights/` and `devkit/tokenizer/`.
-2. [Build the DevKit firmware](BUILD.md#devkit-local-inference). Return to the repository root afterward.
-3. In the same terminal, set the asset location and port, then verify the model:
+Requires **32 MB octal Flash / 16 MB PSRAM**. Complete the shared preparation above first.
+
+### 1. Build and check the model
+
+Set `DEVKIT_ASSETS` to the extracted `devkit` folder, then run:
 
 ```sh
-DEVKIT_ASSETS=/absolute/path/to/pocketgpt-devkit-assets/devkit
-POCKETGPT_PORT=/dev/cu.usbmodemYOURPORT
-python3 tools/verify_pack.py "$DEVKIT_ASSETS/weights"
+cd "$POCKETGPT_REPO"
+export DEVKIT_ASSETS="/absolute/path/to/pocketgpt-devkit-assets/devkit"
+pio run -d espdev_ai/firmware -e local_devkit
+python tools/verify_pack.py "$DEVKIT_ASSETS/weights"
 ```
 
-4. Only when ready to replace the application, clear stale OTA selection and write the required components:
+The build must finish with `SUCCESS`, and the model check with `PASS`.
+
+### 2. Install
 
 ```sh
-python3 -m esptool --chip esp32s3 --port "$POCKETGPT_PORT" erase_region 0xE000 0x2000
-python3 -m esptool --chip esp32s3 --port "$POCKETGPT_PORT" --baud 460800 write_flash \
+python -m esptool --chip esp32s3 --port "$POCKETGPT_PORT" erase_region 0xE000 0x2000
+python -m esptool --chip esp32s3 --port "$POCKETGPT_PORT" --baud 460800 write_flash \
   0x0 espdev_ai/firmware/.pio/build/local_devkit/bootloader.bin \
   0x8000 espdev_ai/firmware/.pio/build/local_devkit/partitions.bin \
   0x10000 espdev_ai/firmware/.pio/build/local_devkit/firmware.bin \
@@ -47,12 +76,7 @@ python3 -m esptool --chip esp32s3 --port "$POCKETGPT_PORT" --baud 460800 write_f
   0x1210000 "$DEVKIT_ASSETS/weights/scales_f16.bin" \
   0x1310000 "$DEVKIT_ASSETS/weights/kept_tensors.bin" \
   0x1E30000 "$DEVKIT_ASSETS/tokenizer/tokenfs.bin"
-```
-
-5. Compare the written application and runtime assets:
-
-```sh
-python3 -m esptool --chip esp32s3 --port "$POCKETGPT_PORT" verify_flash \
+python -m esptool --chip esp32s3 --port "$POCKETGPT_PORT" verify_flash \
   0x10000 espdev_ai/firmware/.pio/build/local_devkit/firmware.bin \
   0x410000 "$DEVKIT_ASSETS/weights/weights_q4.bin" \
   0x1210000 "$DEVKIT_ASSETS/weights/scales_f16.bin" \
@@ -60,43 +84,76 @@ python3 -m esptool --chip esp32s3 --port "$POCKETGPT_PORT" verify_flash \
   0x1E30000 "$DEVKIT_ASSETS/tokenizer/tokenfs.bin"
 ```
 
-6. Reset and open Serial Monitor at 115200 baud. Require `[TIED30M_PACKAGE] PASS`, `[TIED30M_HEAD_CRC] PASS` and `[READY]`. Send `hello` with a newline. The SPIFFS `tokenfs.bin` already includes the runtime tokenizer files; the additional SentencePiece/export files in the archive support inspection and tooling.
+### 3. Chat over USB
+
+```sh
+python -m serial.tools.miniterm "$POCKETGPT_PORT" 115200 --eol LF --echo
+```
+
+Reset the board. Wait for `[TIED30M_PACKAGE] PASS`, `[TIED30M_HEAD_CRC] PASS` and `[READY]`. Type `hello` and press Enter. Exit the monitor with **Ctrl+]**. Do not continue if a model check fails.
 
 ## XIAO with touchscreen keyboard
 
-1. Extract the XIAO ZIP. It contains `pocketgpt-xiao-assets/xiao/`.
-2. Use a microSD card readable by the project's Arduino SD library (FAT32 is the suggested format). Copy the entire folder `xiao/microsd/pocketgpt_xiao_v7b50_final_v1` to the card root. Preserve the exact folder and filenames. Do not place another `microsd` folder above it. This folder contains six files: embeddings, two transformer streams and three tokenizer tables.
-3. [Build the XIAO local firmware](BUILD.md#xiao-local-keyboard--built-and-serial-tested-on-hardware), including the [GCC16 setup](TOOLCHAIN.md). Return to the source repository root.
-4. Package that build together with the released cache/model components. Choose a new output directory:
+Requires **XIAO ESP32-S3, Seeed Round Display and microSD**. Complete the shared preparation above first. With power disconnected, attach the XIAO using the [Seeed assembly guide](https://wiki.seeedstudio.com/get_start_round_display/), then reconnect USB.
+
+### 1. Prepare the microSD
+
+Use FAT32. From the extracted XIAO package, copy the whole folder:
+
+```text
+xiao/microsd/pocketgpt_xiao_v7b50_final_v1
+```
+
+Place it directly in the card's root. Keep all six files and their names. The card should contain `/pocketgpt_xiao_v7b50_final_v1/`, without an extra `microsd` folder above it.
+
+### 2. Build
+
+In the same terminal, complete the one-time [GCC16 compiler setup](TOOLCHAIN.md). It returns you to the source folder with the compiler selected. Then run:
 
 ```sh
-XIAO_ASSETS=/absolute/path/to/pocketgpt-xiao-assets/xiao
-POCKETGPT_PORT=/dev/cu.usbmodemYOURPORT
-python3 tools/package_xiao.py \
+cd "$POCKETGPT_REPO"
+pio run -d xiao_ai/keyboard_interfaces/xiao_local -e local_xiao
+```
+
+Continue only after `SUCCESS`. The build checks that the firmware fits beside the model caches.
+
+### 3. Package the firmware with the model
+
+Set `XIAO_ASSETS` to the extracted `xiao` folder. Use a new output directory; `xiao-install` must not already exist.
+
+```sh
+export XIAO_ASSETS="/absolute/path/to/pocketgpt-xiao-assets/xiao"
+python tools/package_xiao.py \
   --build-dir xiao_ai/keyboard_interfaces/xiao_local/.pio/build/local_xiao \
   --assets-dir "$XIAO_ASSETS" \
   --out-dir xiao-install
 ```
 
-The packager verifies the exact three Flash model/cache hashes, partition table and firmware size. It places K10 and app-tail cache bytes into `app_with_tail.bin`. Do not flash bare firmware.bin for a fresh installation.
+This checks the model components and produces the files below. Install `app_with_tail.bin`; a bare `firmware.bin` does not include the required caches.
 
-5. Only when ready to replace the application, install:
+### 4. Install
 
 ```sh
-python3 -m esptool --chip esp32s3 --port "$POCKETGPT_PORT" --baud 460800 write_flash \
+python -m esptool --chip esp32s3 --port "$POCKETGPT_PORT" --baud 460800 write_flash \
   0x0 xiao-install/bootloader.bin \
   0x8000 xiao-install/partitions.bin \
   0x10000 xiao-install/app_with_tail.bin \
   0xB0000 xiao-install/model.bin
-python3 -m esptool --chip esp32s3 --port "$POCKETGPT_PORT" verify_flash \
+python -m esptool --chip esp32s3 --port "$POCKETGPT_PORT" verify_flash \
   0x10000 xiao-install/app_with_tail.bin \
   0xB0000 xiao-install/model.bin
 ```
 
-6. Insert the prepared microSD and reset the board. Open Serial Monitor at 115200 baud and inspect boot/cache/model errors. The display should show the keyboard. Type `hello`, press GO and allow time for the response. Use the serial tests/retained results to compare behavior; stop if cache or digest checks fail.
+### 5. Chat on the touchscreen
 
-No NVS image is supplied or required. Wi-Fi credentials are not needed for the local firmware. Network Gemini/Ollama firmware is a separate installation described in [NETWORK_SETUP.md](NETWORK_SETUP.md).
+Insert the microSD and reset. Type `hello` on the keyboard and press **GO**. Allow time for a response; the recorded `hello` test took about 6.4 seconds. Use **123/ABC** to switch pages and backspace to delete.
 
-## Validation performed
+If the keyboard or model does not start, inspect the boot messages:
 
-The published model assets match the retained working candidate hashes. The DevKit pack passed hash, size, footer and shared-matrix checks. XIAO matrix placement, cache hashes and cache assembly were checked offline. Recorded boot/cache checks, USB inference results and touchscreen checks are linked in [release status](RELEASE_STATUS.md). These deployment packages are separate from the historical training corpus and complete retraining pipeline.
+```sh
+python -m serial.tools.miniterm "$POCKETGPT_PORT" 115200 --eol LF --echo
+```
+
+Reset with the monitor open. Check the SD folder and model/cache checks; stop if they report a mismatch. Exit with **Ctrl+]**.
+
+[Build reference](BUILD.md) · [Recorded validation](RELEASE_STATUS.md) · [Model license and attribution](MODEL_RELEASE_NOTES.md)
