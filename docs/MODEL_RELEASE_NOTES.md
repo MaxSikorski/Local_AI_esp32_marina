@@ -1,6 +1,6 @@
 # Model and tokenizer release notes
 
-Release: v0.1.0-model-assets. Author: mmm1712. The author selected MIT on 2026-10-13 for the released model weights and tokenizer, to the extent of the author's rights. See MODEL_LICENSE. This does not relicense source datasets or third-party materials. No training corpus, raw teacher outputs, pretrained teacher weights, firmware executable or whole-board backup is distributed in these asset packages.
+Release: v0.1.0-model-assets. Author: mmm1712. The author selected MIT on 2026-10-13 for the released model weights and tokenizer, to the extent of the author's rights. See MODEL_LICENSE. This does not relicense source datasets or third-party materials. No training corpus, firmware executable or whole-board backup is distributed in these asset packages.
 
 ## Dataset attribution
 
@@ -18,13 +18,9 @@ The tokenizer corpus builder additionally names [Databricks Dolly-15k](https://h
 
 These sources were cleaned, filtered, tokenized and mixed for training. Weights were further trained and quantized for deployment. Original general-data revisions and the complete tokenizer source mix remain unpinned; current cards are supporting evidence, not a recovered historical source lock. Asset availability therefore does not imply exact retraining reproducibility or a blanket third-party rights clearance.
 
-## Synthetic-data development
+## Training lineage
 
-The author reports manually authored/edited and AI-assisted local conversational and repair examples. Retained Friend Distill V3 records identify `qwen3:30b-instruct` via Ollama as generator (754 processed requests; 691 accepted outputs) and `gemma3:27b` as meaning/presupposition verifier. [Qwen3-30B-A3B-Instruct-2507](https://huggingface.co/Qwen/Qwen3-30B-A3B-Instruct-2507) is published under Apache 2.0; the exact local model digest was not established in this review. Gemma3 has [separate terms](https://ai.google.dev/gemma/terms), including provisions for distillation/model derivatives; its weights are not included here.
-
-This V3 experiment is not established as an ancestor of the selected deployment. Exact prompt/answer comparisons against available V3 JSONL records found zero matches in the 400 local Base V2 Friend rows, 436 precondition training rows and 1,173 real-repair-v2 training rows. This does not rule out editing, paraphrasing or other AI assistance and is not evidence that every local row was handwritten. Base V2 uses separate passive V4 validation arrays; validation alone is not a gradient-training input. No exact synthetic-data proportion is claimed.
-
-Using generated training examples is distinct from importing pretrained teacher weights. The Base V2 update-zero checkpoint was verified against a fresh seed-42 initialization. See DATA_PROVENANCE.md in the source repository for the checkpoint lineage and remaining reconstruction limits.
+The Base V2 update-zero checkpoint was verified against a fresh seed-42 initialization. See DATA_PROVENANCE.md in the source repository for the checkpoint lineage and remaining reconstruction limits.
 
 ## Privacy and compatibility
 

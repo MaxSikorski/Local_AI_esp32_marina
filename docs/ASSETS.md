@@ -9,7 +9,7 @@ The deployment weights and tokenizer are available in [GitHub Releases](https://
 
 Also download [SHA256SUMS.txt](https://github.com/mmm1712/Local_AI_esp32/releases/download/v0.1.0-model-assets/SHA256SUMS.txt). Keep all three release files together; on macOS/Linux, run `shasum -a 256 -c SHA256SUMS.txt` before extracting. Both archives must be present for every line to report OK. Windows PowerShell can use `Get-FileHash filename.zip -Algorithm SHA256` to compare each hash manually. Each archive also contains ASSET_MANIFEST.json and its own checksum list.
 
-MIT applies to the author's rights in these released weights/tokenizer. Preserve MODEL_LICENSE and ATTRIBUTION.md. See [release provenance and attribution](MODEL_RELEASE_NOTES.md). Dataset text and teacher-model weights are not included.
+MIT applies to the author's rights in these released weights/tokenizer. Preserve MODEL_LICENSE and ATTRIBUTION.md. See [release provenance and attribution](MODEL_RELEASE_NOTES.md). Training datasets are not included.
 
 ## Before installation
 

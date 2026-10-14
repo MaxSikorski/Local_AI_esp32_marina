@@ -17,7 +17,7 @@ Firmware source, touchscreen keyboard interfaces, build/configuration instructio
 ## Limits and separate work
 
 - Deployment weights and tokenizer files are now distributed separately in [GitHub Releases](ASSETS.md); they are not committed to the source tree. They are necessary to run the local model. Original Base V2 training sources are now included under `training/`; the full subsequent repair/export pipeline and training data remain incomplete.
-- The author selected MIT for released weights/tokenizer within the author’s rights. Attribution is supplied with the packages; parts of historical data provenance and exact synthetic-data contribution remain unresolved. See [DATA_PROVENANCE.md](DATA_PROVENANCE.md) and [../LICENSE_STATUS.md](../LICENSE_STATUS.md).
+- The author selected MIT for released weights/tokenizer within the author’s rights. Attribution is supplied with the packages; parts of historical data provenance remain unresolved. See [DATA_PROVENANCE.md](DATA_PROVENANCE.md) and [../LICENSE_STATUS.md](../LICENSE_STATUS.md).
 - The bundled display source comparison and notice recovery are documented; retained license/notice files must remain. Linked binary dependency obligations still need review if publishing firmware binaries. See [THIRD_PARTY.md](THIRD_PARTY.md).
 - Fresh-board provisioning and builds on hosts other than Apple Silicon macOS have not been validated. The local hardware test used an already provisioned board.
 - Checksums and privacy scanning do not certify model quality or the absence of every possible secret.

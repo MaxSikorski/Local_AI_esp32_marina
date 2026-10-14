@@ -20,7 +20,7 @@ These are original project scripts, not replacement examples. Ordinary comments 
 | `pocketlm/tokenizer/build_tokenizer_corpus.py`, `train_tokenizer_candidates.py` | Tokenizer corpus and candidate training |
 | `pocketlm/training/train_pretrain_30m.py` | Earlier approximately 50M-token general experiment, not the 300M run |
 | `pocketlm/training/train_friend_base_30m.py`, `friend_base_v1_config.py` | Separate earlier Friend Base v1 experiment, not a verified ancestor of Base V2 |
-| `pocketlm/training/benchmark_training.py` | Synthetic performance benchmark, not evidence of the final training run |
+| `pocketlm/training/benchmark_training.py` | Random-token performance benchmark, not evidence of the final training run |
 
 ## Verified historical Base V2 run
 

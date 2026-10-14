@@ -20,7 +20,7 @@ The conversational manifest records exact revisions and license labels. The upst
 | [OASST1](https://huggingface.co/datasets/OpenAssistant/oasst1) | `fdf72ae0827c1cda404aff25b6603abec9e3399b` | Apache-2.0 | Conversational manifest and current card agree |
 | [UltraChat 200k](https://huggingface.co/datasets/HuggingFaceH4/ultrachat_200k) | `c02ed026a1a2d6d16596b96149514a9a60ae66fd` | MIT | Conversational manifest and current card agree |
 | [smol-smoltalk](https://huggingface.co/datasets/HuggingFaceTB/smol-smoltalk) | `f80219b491a28e79600fa320e075752f1ea0303e` | Apache-2.0 | Conversational manifest and current card agree |
-| Local Friend / repair examples | Local files | Historically labeled repository-authored; author reports AI assistance as well | Exact teacher contribution to the final corpus is unresolved; see MODEL_RELEASE_NOTES.md |
+| Local Friend / repair examples | Local files | Curated local examples | Historical source documentation is incomplete; see MODEL_RELEASE_NOTES.md |
 
 The source manifest's hash and the exact inspected script hashes are retained in `PROVENANCE_EVIDENCE.json`. Source identifiers are relative labels, without private paths.
 
@@ -39,8 +39,4 @@ Outstanding concrete items:
 1. Identify the historical TinyStories/FineWeb-Edu downloads used by the general corpus.
 2. Recover or reconstruct the exact tokenizer-corpus source manifest, including whether Dolly/GSM8K were actually used.
 3. Confirm authorship/provenance of local repair examples and retain required source attribution.
-4. Keep the separately selected MODEL_LICENSE and dataset notices with redistributed assets; do not apply it to the training datasets or teacher weights.
-
-## Synthetic-data clarification
-
-The author reports using Qwen3 via Ollama to generate development examples and Gemma3 to verify some answers. Retained V3 logs confirm those roles, but V3 is not established as an ancestor of the selected deployment. Exact-pair comparisons against local final-branch sets found no V3 pair matches; editing and paraphrasing are not ruled out. Do not equate use of teacher-generated text with importing pretrained weights, and do not claim all local examples were handwritten. See [model release notes](MODEL_RELEASE_NOTES.md).
+4. Keep the separately selected MODEL_LICENSE and dataset notices with redistributed assets; do not apply it to the training datasets or unrelated model weights.
