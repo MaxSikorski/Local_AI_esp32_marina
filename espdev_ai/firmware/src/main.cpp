@@ -3402,8 +3402,8 @@ void setup(){
 
   runtime_ready = ok;
   if (ok) {
-    Serial.println("[READY] Sentence-stop demo mode. Type a short message and press Enter.");
-    Serial.println("Stops on . ! ? or END. Try: hello | who are you? | i feel sad");
+    Serial.println("[READY] Local chat demo. Type a short message and press Enter.");
+    Serial.println("Stops on END or after 24 generated tokens. Try: hello | who are you? | i feel sad");
     print_prompt();
   } else {
     Serial.println("[FAIL] TIED30M serial chat init failed; inference disabled");
