@@ -2,117 +2,59 @@
 
 ![PocketGPT handheld device with its touchscreen keyboard and a recorded answer](docs/images/pocketgpt-device.jpg)
 
-A language model trained from scratch and running offline on an ESP32-S3, with a touchscreen chat interface on XIAO.
+A language model trained from scratch and running offline on an ESP32-S3. Use a touchscreen keyboard on XIAO or chat over USB on DevKit.
 
-🎬 **[Watch the project video on YouTube](https://youtu.be/LgCNVUndTH8)**
+[Watch the project video](https://youtu.be/LgCNVUndTH8) · [Hardware on Amazon](https://amzn.to/4B00LyJ)
 
-| Project | Inference location | Status |
-|---|---|---|
-| `espdev_ai/firmware` | ESP32-S3 DevKit, 32 MB Flash / 16 MB PSRAM | Source and recorded hardware results |
-| `xiao_ai/keyboard_interfaces/xiao_local` | XIAO ESP32-S3, 8 MB Flash / 8 MB PSRAM, Seeed Round Display and microSD | Built and tested on XIAO over USB; touch input confirmed by user |
-| `xiao_ai/keyboard_interfaces/xiao_network` | Gemini servers or a computer running Ollama | Code provided; compile-checked, not network hardware-tested |
+## Run PocketGPT
 
-The offline model is small and makes mistakes, including arithmetic errors. It is a research/demo project, not a general-purpose assistant. Retained DevKit measurements and the latest XIAO UI validation are in the respective `recorded_results` folders. See [release status](docs/RELEASE_STATUS.md) for the scope of each check.
+**The trained weights and tokenizer are available. No training or API key is needed.** Download the source, build the firmware and install the matching model package using the guide for your board:
+
+| Your hardware | Start here |
+|---|---|
+| XIAO ESP32-S3: 8 MB Flash / 8 MB PSRAM, Seeed Round Display and microSD | [Touchscreen setup](docs/ASSETS.md#xiao-with-touchscreen-keyboard) |
+| ESP32-S3 DevKit: 32 MB octal Flash / 16 MB PSRAM | [USB chat setup](docs/ASSETS.md#devkit) |
+
+Start with the shared preparation steps at the top of the [installation guide](docs/ASSETS.md). Model packages are in [Releases](https://github.com/mmm1712/Local_AI_esp32/releases/tag/v0.1.0-model-assets); firmware is built from this repository. The two boards use different packages.
 
 ## What can PocketGPT actually do?
 
-PocketGPT is an experimental language model with limited capabilities. It demonstrates language-model inference directly on an ESP32-S3, including a touchscreen keyboard on XIAO. The offline firmware runs without a cloud service or internet connection.
+This is a personal experiment with limited capabilities. It can produce short greetings and basic conversational replies, but answers can be wrong, repetitive or unrelated. Even basic arithmetic is unreliable.
 
-It can produce short greetings, basic conversational replies and responses to some familiar prompts. These examples are actual recorded hardware outputs:
+These are recorded hardware outputs:
 
-| Board | Prompt | Recorded response |
+| Prompt | Response | Board |
 |---|---|---|
-| XIAO ESP32-S3 | `hello` | `Hello.` |
-| XIAO ESP32-S3 | `how are you?` | `I'm doing okay.` |
-| ESP32-S3 DevKit | `say something nice` | `You're doing better than you think.` |
+| `hello` | `Hello.` | XIAO |
+| `how are you?` | `I'm doing okay.` | XIAO |
+| `say something nice` | `You're doing better than you think.` | DevKit |
 
-Sources: [XIAO USB test](xiao_ai/recorded_results/ui_2026-10-13/serial_results.txt) and [DevKit test](espdev_ai/recorded_results/2026-10-12_tied30m_dedup_devkit/tests/03.txt). These examples show specific successful prompts, not reliable performance on arbitrary questions.
+The XIAO tests took about 6.4 seconds for `hello` and 11.8 seconds for `how are you?`. These examples do not guarantee the same quality for other questions. [XIAO recordings](xiao_ai/recorded_results/ui_2026-10-13/serial_results.txt) · [DevKit recording](espdev_ai/recorded_results/2026-10-12_tied30m_dedup_devkit/tests/03.txt)
 
-Answers can be incorrect, repetitive or unrelated to the question. Even basic arithmetic is unreliable. PocketGPT is not comparable to ChatGPT or Gemini and should not be relied on for factual answers or advice. A displayed keyboard lets you enter text; it does not imply that the model understands every possible input.
+## Model specifications
 
-Responses also take time: the recorded XIAO `hello` test took about 6.4 seconds from request to completion; `how are you?` took about 11.8 seconds. Speed depends on the board, prompt, output length and firmware configuration. See the linked logs for the measurements.
-
-Gemini and Ollama are separate network options: their answers come from a cloud server or another computer. Their capabilities do not describe the model running on the ESP32 itself.
-
-## Amazon link
-
-[View on Amazon](https://amzn.to/4B00LyJ)
-
-## Get started
-
-1. **Run PocketGPT locally on ESP32-S3:** [download the model assets and follow installation steps](docs/ASSETS.md), then choose the [DevKit build](docs/BUILD.md#devkit-local-inference) or the [XIAO touchscreen build](docs/BUILD.md#xiao-local-keyboard--built-and-serial-tested-on-hardware). The model runs on the board itself.
-2. **For the XIAO local build:** follow the [official GCC16 setup](docs/TOOLCHAIN.md), then the build, packaging and installation steps above.
-3. **Explore how the model was trained:** see the [original training sources and reproducibility limits](training/README.md).
-4. **Optional — use Gemini or Ollama with XIAO:** follow the [network setup guide](docs/NETWORK_SETUP.md). This is a separate firmware that sends questions to a cloud service or another computer.
-
-**Model weights and tokenizer files are available in [GitHub Releases](https://github.com/mmm1712/Local_AI_esp32/releases/tag/v0.1.0-model-assets).** Follow the [download and installation guide](docs/ASSETS.md), using the package matching your board. Build the firmware from this repository. Gemini/Ollama does not require PocketGPT weights.
-
-## Model and hardware specifications
-
-| Characteristic | PocketGPT local model |
+| Characteristic | Value |
 |---|---|
-| Independent trained parameters | 30,460,864 (about 30.46 million) |
-| Architecture | Decoder-only Transformer, 12 layers, hidden size 448 |
+| Independent trained parameters | 30,460,864 |
+| Architecture | Decoder-only Transformer; 12 layers; hidden size 448 |
 | Attention | 8 query heads, 2 key/value heads |
-| Tokenizer | SentencePiece, 6,144 tokens |
-| Firmware context limit | 64 tokens |
-| Maximum generated output | 24 tokens per response |
-| Internet during inference | Not required |
-| Recorded generation speed | About 1.41 tokens/s on DevKit; 0.742 tokens/s on XIAO |
+| Tokenizer | SentencePiece; 6,144 tokens |
+| Runtime limits | 64-token context; up to 24 generated tokens per response |
+| Recorded generation speed | DevKit: about 1.41 tokens/s; XIAO: about 0.742 tokens/s |
+| Deployment size | DevKit: 20,241,616 bytes; XIAO: 21,706,088 bytes |
 
-| Hardware | Memory and peripherals | Model deployment size |
-|---|---|---|
-| ESP32-S3 DevKit | 32 MB Flash, 16 MB PSRAM; USB Serial chat | 20,241,616 bytes, deduplicated mixed Q4/FP16 package |
-| XIAO ESP32-S3 | 8 MB Flash, 8 MB PSRAM; Seeed Round Display, touchscreen keyboard and microSD | 21,706,088 bytes across deployment assets, including Flash caches; board-specific mixed quantization |
+Speeds are individual measurements, not guarantees. The packages use different mixed-precision layouts. See [model and quantization details](docs/MODEL_CARD.md).
 
-Deployment files differ between boards and are not interchangeable. Recorded speeds are individual hardware measurements, not a controlled benchmark or a guarantee. Token limits count tokenizer tokens, not words. See [model and artifact details](docs/MODEL_CARD.md) for exact formats.
+## Training
 
-## Further documentation
+The [original training code and settings](training/README.md) are included. **Base V2** names the second base-model version, trained from random initialization on about 300 million token positions before later refinement. Exact historical retraining requires additional data and records described in that guide.
 
-- [Data provenance](docs/DATA_PROVENANCE.md)
-- [Third-party inventory](docs/THIRD_PARTY.md)
-- [Release status and omissions](docs/RELEASE_STATUS.md)
-- [Privacy](docs/PRIVACY.md)
-- [MIT license and exclusions](LICENSE_STATUS.md)
+## Optional: Gemini or Ollama
 
-Run `python3 -B tools/verify_release.py .` before publishing to screen local metadata and common secret patterns. It does not verify file integrity, contact hardware, or guarantee the absence of every secret. The optional root checksum list was removed.
+The [network interface](docs/NETWORK_SETUP.md) uses the same XIAO/display hardware, but runs a different firmware. Answers come from Gemini's servers or Ollama on your PC. This option does not use PocketGPT's weights.
 
-The Git repository contains source code; trained deployment weights and tokenizer files are distributed separately through [Releases](https://github.com/mmm1712/Local_AI_esp32/releases/tag/v0.1.0-model-assets). The author licenses these artifacts under MIT to the extent of the author’s rights; preserve the [model license](MODEL_LICENSE) and [dataset attribution/provenance notes](docs/MODEL_RELEASE_NOTES.md). Training data and full historical reproducibility remain separate. Whole-board backups and credentials are excluded. The Gemini/Ollama interface does not require PocketGPT weights.
+## Reference
 
-## Training source
-
-[Original architecture, training scripts and reproducibility limits](training/README.md) are included.
-
-The base model was initially trained on approximately 300 million token positions, followed by further training and refinement. **Base V2** is the internal name for the second version of that base model, before the later refinement stages.
-
- These document the historical Base V2 run; they are not a complete downloadable training corpus or the full later repair pipeline.
-
-## Serial testing
-
-Install `python3 -m pip install -r requirements.txt`, then run:
-
-```sh
-python3 tools/serial_test.py --port /dev/ttyACM0 --output serial-results --hello-only
-```
-
-Windows: use `--port COM3`; macOS: use your actual `/dev/cu.usbmodem...` device. This command opens the selected port and sends a prompt after the expected DevKit boot. Reset the board after starting if necessary. Logs are local outputs; review them before sharing.
-
-The XIAO local UI was subsequently installed and tested on 2026-10-13 after a verified private backup. See `xiao_ai/recorded_results/ui_2026-10-13/`.
-
-## Source layout
-
-| File or folder | Purpose |
-|---|---|
-| `espdev_ai/firmware/src/main.cpp` | DevKit offline model and USB chat entry point |
-| `xiao_ai/keyboard_interfaces/xiao_local/src/main.cpp` | XIAO offline model and touchscreen entry point |
-| `model_storage.inc` | Access to model matrices across Flash, PSRAM and SD |
-| `output_projection.inc` | Quantized output projection and repair rows |
-| `model_offsets.h`, `model_layout.h`, `model_storage_layout.h`, `model_storage_checksums.h` | Model-specific binary layout and validation constants; do not interchange between boards |
-| `q4_*.inc` | Quantized matrix kernels and dispatch |
-| `batched_*.inc`, `two_token_*.inc`, `prompt_prefill.inc` | Batched prompt processing |
-| `xiao_ai/keyboard_interfaces/xiao_network/xiao_network.ino` | Gemini/Ollama network sketch |
-| `touchscreen_keyboard.h` | Network sketch display and input interface |
-| `google_root_certificates.h` | Public Google TLS trust certificates; not secret keys |
-| `platformio.ini`, `partitions_*.csv`, `check_firmware_size.py` | Board build, Flash layout and XIAO size guard |
-
-Implementation fragments ending in `.inc` are included by the main source; they are not standalone programs. Third-party display filenames retain their upstream names. Runtime model asset names and historical test logs retain their original identifiers.
+- [Build reference](docs/BUILD.md) · [Validation results](docs/RELEASE_STATUS.md)
+- [Data sources](docs/DATA_PROVENANCE.md) · [Third-party notices](docs/THIRD_PARTY.md) · [Privacy](docs/PRIVACY.md)
+- [Code license](LICENSE) · [Model license](MODEL_LICENSE) · [License scope](LICENSE_STATUS.md)
