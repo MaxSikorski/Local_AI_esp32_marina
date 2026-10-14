@@ -97,6 +97,8 @@ python3 tools/serial_test.py --port /dev/ttyACM0 --output serial-results --hello
 
 Windows: use `--port COM3`; macOS: use your actual `/dev/cu.usbmodem...` device. This command opens the selected port and sends a prompt after the expected DevKit boot. Reset the board after starting if necessary. Logs are local outputs; review them before sharing.
 
+The serial test requires a nonempty reply and generation statistics with a positive token count. Explicit inference failures or incomplete responses make the command exit with an error. Completed response transcripts are saved in `results.json` with `ok` and `error` fields before validation errors are raised; later prompts are not sent after a failure. Passing confirms generation completed, not that the answer is factually correct.
+
 The XIAO local UI was subsequently installed and tested on 2026-10-13 after a verified private backup. See `xiao_ai/recorded_results/ui_2026-10-13/`.
 
 ## Source layout
